@@ -32,6 +32,6 @@ export async function getJovenes(locale?: string): Promise<Jovenes> {
   return {
     nombre: (gl && d.nombreGl) || d.nombre || local.nombre,
     cuando: (gl && d.cuandoGl) || d.cuando || local.cuando,
-    instagram: d.instagram ?? local.instagram,
+    instagram: d.instagram?.trim() || local.instagram,
   };
 }

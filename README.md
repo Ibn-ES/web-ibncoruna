@@ -40,6 +40,7 @@ Requiere Node ≥ 22.23 (lo pide Astro 7).
   - En la B (Bandera), el blanco sobre `#0099CC` no llega al contraste mínimo, por eso los botones usan el azul profundo.
 - **Contenido separado en `site.ts`** con la forma de datos que tendría una respuesta de Sanity: cambiarlo por una query real no obliga a tocar los componentes.
 - **Bilingüe (español/gallego)** vía el i18n nativo de Astro: español en la raíz, gallego bajo `/gl/`. Ver «Idiomas» en `AGENTS.md`.
+- **SEO:** sitemap automático (`@astrojs/sitemap`), `robots.txt`, imagen propia para compartir en redes y datos estructurados (`schema.org/Church`) en la portada. Ver «SEO» en `AGENTS.md`.
 
 ## Prédicas y testimonios
 
@@ -88,7 +89,4 @@ El hero puede llevar **foto o vídeo de fondo** y una **tarjeta para anunciar** 
 - [ ] Fotos reales: `<Photo src="…">`. Las de ciudad y mar, con `duotone`; las de personas, a color natural. Niños siempre sin caras.
 - [ ] Conectar el formulario "Planifica tu visita" (`site.contacto.formAction`). El aviso legal y la política de privacidad ya tienen página propia (`/legal`, `/privacidad`), editable desde Sanity.
 - [ ] Si la directiva elige Merriweather o Nunito como letra de lectura: cambiar el import en `Layout.astro` y `--font-body` en `global.css`.
-- [ ] Poner el dominio definitivo en `astro.config.mjs`.
-- [ ] `SPOTIFY_RSS_URL` y los enlaces de Spotify / Apple Podcasts en `site.ts` (`predicas`).
-- [ ] Crear el schema y el contenido de `testimonio` y `portada` en Sanity, y el webhook de rebuild.
 - [ ] Grabar el vídeo o elegir la foto del hero.

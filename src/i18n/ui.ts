@@ -144,6 +144,8 @@ const es: Diccionario = {
   'predicas.pageLead': 'La prédica de cada domingo, con palabras de todos los días. Aquí o en Spotify, para el coche, el paseo o el sofá.',
   'predicas.todasAria': 'Todas las prédicas',
   'predicas.metaDescription': 'Las prédicas de cada domingo de Buenas Noticias A Coruña. Escúchalas aquí o en Spotify.',
+  'predicas.buscarPlaceholder': 'Buscar por título o fecha…',
+  'predicas.sinResultados': 'No hay prédicas que coincidan con tu búsqueda.',
 
   'paletteSwitcher.aria': 'Probar paleta de color',
   'paletteSwitcher.paleta': 'Paleta',
@@ -284,6 +286,8 @@ const gl: Diccionario = {
   'predicas.pageLead': 'A predicación de cada domingo, con palabras do día a día. Aquí ou en Spotify, para o coche, o paseo ou o sofá.',
   'predicas.todasAria': 'Todas as predicacións',
   'predicas.metaDescription': 'As predicacións de cada domingo de Buenas Noticias A Coruña. Escóitaas aquí ou en Spotify.',
+  'predicas.buscarPlaceholder': 'Buscar por título ou data…',
+  'predicas.sinResultados': 'Non hai predicacións que coincidan coa túa busca.',
 
   'paletteSwitcher.aria': 'Probar paleta de cor',
   'paletteSwitcher.paleta': 'Paleta',

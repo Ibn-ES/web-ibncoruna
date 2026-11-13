@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://buenasnoticiascoruna.es/sitemap-index.xml
