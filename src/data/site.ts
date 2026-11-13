@@ -31,7 +31,7 @@ export const site = {
   /** Paleta por defecto mientras la directiva decide (a, b o c). */
   defaultPalette: 'a' as Palette,
   /** Muestra el selector flotante de paletas. Ponlo a false al publicar. */
-  showPaletteSwitcher: true,
+  showPaletteSwitcher: false,
 
   /**
    * Hero de la portada. Si Directus tiene la colección "portada", sus valores
@@ -110,12 +110,14 @@ export const site = {
   ],
 
   // Rutas con "/" delante para que funcionen también desde /predicas.
+  // La etiqueta de cada uno vive en i18n/ui.ts (clave `nav.<key>`), para que
+  // salga traducida sin tocar este fichero.
   nav: [
-    { label: 'Visítanos', href: '/#visitanos' },
-    { label: 'Quiénes somos', href: '/#quienes' },
-    { label: 'Prédicas', href: '/predicas' },
-    { label: 'Testimonios', href: '/#testimonios' },
-    { label: 'Jóvenes', href: '/#jovenes' },
-    { label: 'Contacto', href: '/#contacto' },
+    { key: 'visitanos', href: '/#visitanos' },
+    { key: 'quienesSomos', href: '/#quienes' },
+    { key: 'predicas', href: '/predicas' },
+    { key: 'testimonios', href: '/#testimonios' },
+    { key: 'jovenes', href: '/#jovenes' },
+    { key: 'contacto', href: '/#contacto' },
   ],
 };

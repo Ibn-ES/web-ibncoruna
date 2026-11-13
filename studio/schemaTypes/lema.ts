@@ -3,6 +3,7 @@ import { defineField, defineType } from 'sanity';
 /**
  * Singleton: lema de la iglesia. Los campos coinciden con los que
  * lee src/lib/lema.ts en el sitio (hero, pie de página y banda de frases).
+ * Los campos "(gallego)" son opcionales: vacíos, se usa el español.
  */
 export default defineType({
   name: 'lema',
@@ -16,15 +17,31 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'principalGl',
+      title: 'Lema principal (gallego)',
+      type: 'string',
+    }),
+    defineField({
       name: 'secundario',
       title: 'Lema secundario',
       description: 'Segunda línea del titular del hero. Ej: "Solo tienes que venir."',
       type: 'string',
     }),
     defineField({
+      name: 'secundarioGl',
+      title: 'Lema secundario (gallego)',
+      type: 'string',
+    }),
+    defineField({
       name: 'alternativos',
       title: 'Lemas alternativos',
       description: 'Frases que se repiten en la banda que se desplaza bajo el hero.',
+      type: 'array',
+      of: [{ type: 'string' }],
+    }),
+    defineField({
+      name: 'alternativosGl',
+      title: 'Lemas alternativos (gallego)',
       type: 'array',
       of: [{ type: 'string' }],
     }),

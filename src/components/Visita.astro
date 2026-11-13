@@ -1,54 +1,57 @@
 ---
+import Icon from './Icon.astro';
 import { getDomingo } from '../lib/domingo';
 import { getContacto } from '../lib/contacto';
+import { useTranslations } from '../i18n/ui';
 
-const domingo = await getDomingo();
-const contacto = await getContacto();
+const domingo = await getDomingo(Astro.currentLocale);
+const contacto = await getContacto(Astro.currentLocale);
+const t = useTranslations(Astro.currentLocale);
 
-const datos = [
-  { label: 'Dirección', value: domingo.direccionCompleta, href: domingo.mapaUrl },
-  { label: 'Domingos', value: domingo.hora },
-  { label: 'WhatsApp', value: contacto.whatsapp, href: contacto.whatsappUrl },
-  { label: 'Instagram', value: `@${contacto.instagram}`, href: `https://instagram.com/${contacto.instagram}` },
+const datos: { label: string; value: string; href?: string; icon?: 'instagram' | 'whatsapp' }[] = [
+  { label: t('visita.labelDireccion'), value: domingo.direccionCompleta, href: domingo.mapaUrl },
+  { label: t('visita.labelDomingos'), value: domingo.hora },
+  { label: t('visita.labelWhatsapp'), value: contacto.whatsapp, href: contacto.whatsappUrl, icon: 'whatsapp' },
+  { label: t('visita.labelInstagram'), value: `@${contacto.instagram}`, href: `https://instagram.com/${contacto.instagram}`, icon: 'instagram' },
 ];
 ---
 
 <section id="contacto" class="panel mt-[var(--inset)] bg-surface py-[clamp(90px,11vw,150px)]" aria-labelledby="visita-title">
   <div class="container grid grid-cols-[minmax(0,5fr)_minmax(0,6fr)] items-start gap-x-[clamp(40px,7vw,112px)] gap-y-14 max-[900px]:grid-cols-1">
     <div class="reveal flex flex-col gap-5">
-      <p class="eyebrow">Planifica tu visita</p>
-      <h2 id="visita-title" class="display-l">Te guardamos sitio.</h2>
-      <p class="lead">Dinos cuándo vienes y te esperamos en la puerta. Trae a quien quieras.</p>
+      <p class="eyebrow">{t('visita.eyebrow')}</p>
+      <h2 id="visita-title" class="display-l">{t('visita.titulo')}</h2>
+      <p class="lead">{t('visita.lead')}</p>
 
       <dl class="mt-6 border-t border-[color-mix(in_srgb,var(--deep)_18%,transparent)]">
         {datos.map((d) => (
           <div class="grid grid-cols-[120px_minmax(0,1fr)] gap-x-5 gap-y-1 border-b border-[color-mix(in_srgb,var(--deep)_18%,transparent)] py-[18px] max-[480px]:grid-cols-1">
-            <dt class="pt-[2px] font-display text-[0.9375rem] font-bold">{d.label}</dt>
+            <dt class="flex items-center gap-2 pt-[2px] font-display text-[0.9375rem] font-bold">{d.icon && <Icon name={d.icon} class="h-[1.05em] w-[1.05em] text-[color-mix(in_srgb,var(--deep)_65%,transparent)]" />}{d.label}</dt>
             <dd class="m-0">{d.href ? <a class="[text-decoration-color:color-mix(in_srgb,var(--deep)_35%,transparent)] [text-underline-offset:4px]" href={d.href}>{d.value}</a> : d.value}</dd>
           </div>
         ))}
       </dl>
     </div>
 
-    <!-- TODO: conectar el envío (colección "visitas" en Directus, Formspree…). Ver site.contacto.formAction -->
+    <!-- TODO: conectar el envío (colección "visitas" en Sanity, Formspree…). Ver site.contacto.formAction -->
     <form class="reveal flex flex-col gap-[26px] rounded-xl border border-line bg-white p-[clamp(28px,4vw,48px)] shadow-[0_40px_80px_-48px_color-mix(in_srgb,var(--deep)_45%,transparent)]" action={contacto.formAction} method="post">
       <div class="m-0 flex flex-col gap-[10px] border-0 p-0">
-        <label class="font-display text-[0.9375rem] font-bold" for="f-nombre">Tu nombre</label>
+        <label class="font-display text-[0.9375rem] font-bold" for="f-nombre">{t('visita.formNombre')}</label>
         <input
           class="h-14 rounded-2xl border-[1.5px] border-[color-mix(in_srgb,var(--deep)_22%,transparent)] bg-white px-[18px] font-[inherit] text-[1.0625rem] text-deep transition-[border-color,box-shadow,background-color] duration-200 placeholder:text-[color-mix(in_srgb,var(--deep)_58%,transparent)] focus:border-btn focus:bg-white focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--btn)_18%,transparent)] focus:outline-none"
           id="f-nombre"
           name="nombre"
           type="text"
           autocomplete="given-name"
-          placeholder="¿Cómo te llamas?"
+          placeholder={t('visita.placeholderNombre')}
           required
         />
       </div>
 
       <fieldset class="m-0 flex flex-col gap-[10px] border-0 p-0">
-        <legend class="mb-[10px] font-display text-[0.9375rem] font-bold">¿Qué domingo vienes?</legend>
+        <legend class="mb-[10px] font-display text-[0.9375rem] font-bold">{t('visita.legendCuando')}</legend>
         <div class="flex flex-wrap gap-2">
-          {['Este domingo', 'El próximo', 'Aún no lo sé'].map((o, i) => (
+          {[t('visita.opcionEsteDomingo'), t('visita.opcionProximo'), t('visita.opcionNoSe')].map((o, i) => (
             <label class="relative">
               <input class="peer absolute inset-0 cursor-pointer opacity-0" type="radio" name="cuando" value={o} checked={i === 0} />
               <span class="inline-flex min-h-[46px] items-center rounded-full border-[1.5px] border-[color-mix(in_srgb,var(--deep)_22%,transparent)] px-5 font-display text-[0.9375rem] font-semibold transition-[background-color,color,border-color] duration-200 peer-checked:border-deep peer-checked:bg-deep peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-warm peer-focus-visible:outline-offset-2">{o}</span>
@@ -58,9 +61,9 @@ const datos = [
       </fieldset>
 
       <fieldset class="m-0 flex flex-col gap-[10px] border-0 p-0">
-        <legend class="mb-[10px] font-display text-[0.9375rem] font-bold">¿Vienes con niños?</legend>
+        <legend class="mb-[10px] font-display text-[0.9375rem] font-bold">{t('visita.legendNinos')}</legend>
         <div class="flex flex-wrap gap-2">
-          {['Sí', 'No'].map((o) => (
+          {[t('visita.si'), t('visita.no')].map((o) => (
             <label class="relative">
               <input class="peer absolute inset-0 cursor-pointer opacity-0" type="radio" name="ninos" value={o} />
               <span class="inline-flex min-h-[46px] items-center rounded-full border-[1.5px] border-[color-mix(in_srgb,var(--deep)_22%,transparent)] px-5 font-display text-[0.9375rem] font-semibold transition-[background-color,color,border-color] duration-200 peer-checked:border-deep peer-checked:bg-deep peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-[3px] peer-focus-visible:outline-warm peer-focus-visible:outline-offset-2">{o}</span>
@@ -70,24 +73,24 @@ const datos = [
       </fieldset>
 
       <div class="m-0 flex flex-col gap-[10px] border-0 p-0">
-        <label class="font-display text-[0.9375rem] font-bold" for="f-contacto">WhatsApp o email</label>
+        <label class="font-display text-[0.9375rem] font-bold" for="f-contacto">{t('visita.formContacto')}</label>
         <input
           class="h-14 rounded-2xl border-[1.5px] border-[color-mix(in_srgb,var(--deep)_22%,transparent)] bg-white px-[18px] font-[inherit] text-[1.0625rem] text-deep transition-[border-color,box-shadow,background-color] duration-200 placeholder:text-[color-mix(in_srgb,var(--deep)_58%,transparent)] focus:border-btn focus:bg-white focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--btn)_18%,transparent)] focus:outline-none"
           id="f-contacto"
           name="contacto"
           type="text"
           autocomplete="tel"
-          placeholder="Para confirmarte la hora"
+          placeholder={t('visita.placeholderContacto')}
           required
         />
       </div>
 
       <label class="flex items-start gap-3 text-[0.9375rem] leading-[1.5]">
         <input class="mt-px h-[22px] w-[22px] flex-none" type="checkbox" name="privacidad" required />
-        <span>Acepto que me contactéis solo para organizar mi visita. <a href="#">Política de privacidad</a></span>
+        <span>{t('visita.privacidadPre')} <a href="#">{t('visita.politicaPrivacidad')}</a></span>
       </label>
 
-      <button type="submit" class="btn self-start min-h-[58px] px-[2em] max-[480px]:self-stretch">Avisar de que voy <span class="arrow" aria-hidden="true">→</span></button>
+      <button type="submit" class="btn self-start min-h-[58px] px-[2em] max-[480px]:self-stretch">{t('visita.enviar')} <span class="arrow" aria-hidden="true">→</span></button>
     </form>
   </div>
 </section>

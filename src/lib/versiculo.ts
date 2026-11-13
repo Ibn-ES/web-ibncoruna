@@ -3,8 +3,10 @@
  *
  * Documento "versiculo" en Sanity (singleton, _type == "versiculo"), campos:
  *   texto, cita   string
+ *   textoGl, citaGl   string (versión en gallego)
  */
 import { site } from '../data/site';
+import { esLocale } from '../i18n/ui';
 import { getSingleton } from './sanitySingleton';
 
 export interface Versiculo {
@@ -12,15 +14,21 @@ export interface Versiculo {
   cita: string;
 }
 
-type SanityVersiculo = Partial<Record<keyof Versiculo, string | null>>;
+interface SanityVersiculo {
+  texto?: string | null;
+  cita?: string | null;
+  textoGl?: string | null;
+  citaGl?: string | null;
+}
 
-export async function getVersiculo(): Promise<Versiculo> {
+export async function getVersiculo(locale?: string): Promise<Versiculo> {
+  const gl = esLocale(locale) === 'gl';
   const local = site.versiculo;
-  const d = await getSingleton<SanityVersiculo>('versiculo', `{ texto, cita }`);
+  const d = await getSingleton<SanityVersiculo>('versiculo', `{ texto, cita, textoGl, citaGl }`);
   if (!d) return local;
 
   return {
-    texto: d.texto ?? local.texto,
-    cita: d.cita ?? local.cita,
+    texto: (gl && d.textoGl) || d.texto || local.texto,
+    cita: (gl && d.citaGl) || d.cita || local.cita,
   };
 }

@@ -2,7 +2,9 @@ import { defineField, defineType } from 'sanity';
 
 /**
  * Singleton: datos del domingo. Los campos coinciden con los que
- * lee src/lib/domingo.ts en el sitio.
+ * lee src/lib/domingo.ts en el sitio. Los campos "(gallego)" son
+ * opcionales: vacíos, se usa el español. La hora, el mapa y la foto
+ * no se traducen.
  */
 export default defineType({
   name: 'domingo',
@@ -22,9 +24,19 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'direccionGl',
+      title: 'Dirección (corta, gallego)',
+      type: 'string',
+    }),
+    defineField({
       name: 'direccionCompleta',
       title: 'Dirección completa',
       description: 'Calle y número. Ej: "Calle Example 12, A Coruña"',
+      type: 'string',
+    }),
+    defineField({
+      name: 'direccionCompletaGl',
+      title: 'Dirección completa (gallego)',
       type: 'string',
     }),
     defineField({
@@ -34,8 +46,19 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'duracionGl',
+      title: 'Duración (gallego)',
+      type: 'string',
+    }),
+    defineField({
       name: 'ninos',
       title: 'Qué hay para los niños',
+      type: 'text',
+      rows: 2,
+    }),
+    defineField({
+      name: 'ninosGl',
+      title: 'Qué hay para los niños (gallego)',
       type: 'text',
       rows: 2,
     }),
@@ -43,6 +66,12 @@ export default defineType({
       name: 'resumen',
       title: 'Cómo es un domingo',
       description: 'Dos o tres frases, con palabras de todos los días.',
+      type: 'text',
+      rows: 3,
+    }),
+    defineField({
+      name: 'resumenGl',
+      title: 'Cómo es un domingo (gallego)',
       type: 'text',
       rows: 3,
     }),

@@ -1,12 +1,19 @@
 ---
 import Logo from './Logo.astro';
+import Flag from './Flag.astro';
 import { site } from '../data/site';
+import { useTranslations, localizedHref, esLocale, locales, switchLocaleHref } from '../i18n/ui';
 
 interface Props {
   /** Ruta de la página actual, para marcar el enlace activo */
   current?: string;
 }
 const { current = '/' } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
+const href = (h: string) => localizedHref(Astro.currentLocale, h);
+const actual = esLocale(Astro.currentLocale);
+const hrefIdioma = (l: (typeof locales)[number]) =>
+  l === actual ? undefined : switchLocaleHref(Astro.currentLocale, Astro.url.pathname);
 ---
 
 <header
@@ -14,9 +21,9 @@ const { current = '/' } = Astro.props;
 >
   <nav
     class="pointer-events-auto flex w-full max-w-[1120px] items-center gap-5 rounded-full border border-line bg-[color-mix(in_srgb,#fff_86%,transparent)] py-2 pl-[22px] pr-2 text-deep shadow-[0_12px_40px_-18px_color-mix(in_srgb,var(--deep)_45%,transparent)] backdrop-blur-[18px] backdrop-saturate-[1.4]"
-    aria-label="Principal"
+    aria-label={t('nav.principal')}
   >
-    <a href="/" class="mr-auto no-underline" aria-label="Buenas Noticias A Coruña, inicio">
+    <a href={href('/')} class="mr-auto no-underline" aria-label={t('nav.inicio', site.name)}>
       <Logo />
     </a>
 
@@ -24,25 +31,50 @@ const { current = '/' } = Astro.props;
       {site.nav.map((item) => (
         <li>
           <a
-            href={item.href}
+            href={href(item.href)}
             aria-current={item.href === current ? 'page' : undefined}
             class="block rounded-full px-3 py-3 font-display text-[0.9375rem] font-semibold no-underline transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--deep)_8%,transparent)] aria-[current=page]:bg-deep aria-[current=page]:text-white"
           >
-            {item.label}
+            {t(`nav.${item.key}`)}
           </a>
         </li>
       ))}
     </ul>
 
-    <a href="/#contacto" class="btn min-h-[46px] max-[1160px]:hidden">Planifica tu visita</a>
+    <details class="lang-dropdown relative hidden min-[640px]:block max-[1160px]:hidden">
+      <summary
+        class="flex min-h-[46px] cursor-pointer list-none items-center gap-2 rounded-full px-3 font-display text-[0.9375rem] font-bold uppercase tracking-[0.04em] [&::-webkit-details-marker]:hidden hover:bg-[color-mix(in_srgb,var(--deep)_8%,transparent)]"
+        aria-label={t('idioma.seleccionar')}
+      >
+        <Flag locale={actual} />
+        {actual}
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+      </summary>
+      <ul class="absolute right-0 top-[calc(100%+8px)] m-0 flex min-w-[170px] list-none flex-col gap-1 rounded-2xl border border-line bg-[#fff] p-2 shadow-[0_20px_50px_-20px_color-mix(in_srgb,var(--deep)_45%,transparent)]" role="list">
+        {locales.map((l) => (
+          <li>
+            <a
+              href={hrefIdioma(l) ?? Astro.url.pathname}
+              aria-current={l === actual ? 'true' : undefined}
+              class="flex items-center gap-[10px] rounded-xl px-3 py-[10px] font-display text-[0.9375rem] font-semibold text-deep no-underline hover:bg-[color-mix(in_srgb,var(--deep)_8%,transparent)] aria-[current=true]:bg-deep aria-[current=true]:text-white"
+            >
+              <Flag locale={l} />
+              {t(`idioma.${l}`)}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </details>
+
+    <a href={href('/#contacto')} class="btn min-h-[46px] max-[1160px]:hidden">{t('cta.planificaVisita')}</a>
 
     <!-- Menú móvil: Popover API nativa, sin librerías -->
     <button
       class="hidden min-h-[46px] cursor-pointer items-center gap-[10px] rounded-full border-0 bg-deep px-[18px] font-display text-[0.9375rem] font-bold text-white max-[1160px]:flex"
       popovertarget="menu-movil"
-      aria-label="Abrir menú"
+      aria-label={t('nav.abrirMenu')}
     >
-      <span>Menú</span>
+      <span>{t('nav.menu')}</span>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"></path></svg>
     </button>
   </nav>
@@ -54,7 +86,7 @@ const { current = '/' } = Astro.props;
         class="grid h-12 w-12 cursor-pointer place-items-center rounded-full border border-[color-mix(in_srgb,#fff_30%,transparent)] bg-transparent text-white"
         popovertarget="menu-movil"
         popovertargetaction="hide"
-        aria-label="Cerrar menú"
+        aria-label={t('nav.cerrarMenu')}
       >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
       </button>
@@ -63,16 +95,30 @@ const { current = '/' } = Astro.props;
       {site.nav.map((item) => (
         <li>
           <a
-            href={item.href}
+            href={href(item.href)}
             aria-current={item.href === current ? 'page' : undefined}
             class="block py-[10px] font-display text-[clamp(2.25rem,10vw,3.25rem)] font-extrabold leading-[1.1] tracking-[-0.035em] no-underline"
           >
-            {item.label}
+            {t(`nav.${item.key}`)}
           </a>
         </li>
       ))}
     </ul>
-    <a href="/#contacto" class="btn btn--warm min-h-[60px] self-stretch">Planifica tu visita <span class="arrow" aria-hidden="true">→</span></a>
+    <ul class="m-0 flex list-none flex-wrap gap-2 self-start p-0" role="list" aria-label={t('idioma.seleccionar')}>
+      {locales.map((l) => (
+        <li>
+          <a
+            href={hrefIdioma(l) ?? Astro.url.pathname}
+            aria-current={l === actual ? 'true' : undefined}
+            class="flex min-h-11 items-center gap-2 rounded-full border-[1.5px] border-[color-mix(in_srgb,#fff_30%,transparent)] px-4 font-display text-base font-bold uppercase tracking-[0.04em] text-white no-underline aria-[current=true]:border-transparent aria-[current=true]:bg-[color-mix(in_srgb,#fff_18%,transparent)]"
+          >
+            <Flag locale={l} class="h-[0.9em] w-auto rounded-[2px]" />
+            {l}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a href={href('/#contacto')} class="btn btn--warm min-h-[60px] self-stretch">{t('cta.planificaVisita')} <span class="arrow" aria-hidden="true">→</span></a>
   </div>
 </header>
 
@@ -80,6 +126,13 @@ const { current = '/' } = Astro.props;
   // Al tocar un enlace del menú móvil, se cierra el menú.
   const sheet = document.getElementById('menu-movil');
   sheet?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => sheet.hidePopover()));
+
+  // El desplegable de idioma se cierra al tocar fuera.
+  document.querySelectorAll<HTMLDetailsElement>('.lang-dropdown').forEach((dd) => {
+    document.addEventListener('click', (e) => {
+      if (dd.open && !dd.contains(e.target as Node)) dd.open = false;
+    });
+  });
 </script>
 
 <style>

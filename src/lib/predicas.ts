@@ -108,8 +108,9 @@ function limpiarHtml(html: string): string {
     .trim();
 }
 
-export function formatFecha(fecha: Date): string {
-  return new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }).format(fecha);
+export function formatFecha(fecha: Date, locale?: string): string {
+  const tag = locale === 'gl' ? 'gl-ES' : 'es-ES';
+  return new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).format(fecha);
 }
 
 /** Datos de ejemplo mientras no haya RSS configurado. */

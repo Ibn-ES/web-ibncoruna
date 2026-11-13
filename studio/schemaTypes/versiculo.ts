@@ -16,9 +16,21 @@ export default defineType({
       rows: 3,
     }),
     defineField({
+      name: 'textoGl',
+      title: 'Texto (gallego)',
+      type: 'text',
+      rows: 3,
+    }),
+    defineField({
       name: 'cita',
       title: 'Cita',
       description: 'Ej: "Mateo 11:28"',
+      type: 'string',
+    }),
+    defineField({
+      name: 'citaGl',
+      title: 'Cita (gallego)',
+      description: 'Normalmente igual que en español; cámbiala solo si usáis una traducción distinta de la Biblia.',
       type: 'string',
     }),
   ],

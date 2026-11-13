@@ -8,13 +8,14 @@
  *   fondoImagenUrl   url      foto de fondo, normalmente de Cloudinary
  *   fondoVideoUrl    url      vídeo en bucle, sin sonido, normalmente de Cloudinary
  *   dosTonos         boolean  ciudad/mar = true · personas = false
- *   eyebrow          string   etiqueta pequeña encima del titular
- *   texto            text     párrafo bajo el titular
- *   botonPrincipalTexto, botonSecundarioTexto   string
+ *   eyebrow, texto, botonPrincipalTexto, botonSecundarioTexto   string
+ *   eyebrowGl, textoGl, botonPrincipalTextoGl, botonSecundarioTextoGl   string (versión en gallego)
  *   promoActiva      boolean
  *   promoEtiqueta, promoTitulo, promoTexto, promoEnlace, promoEnlaceTexto   string
+ *   promoEtiquetaGl, promoTituloGl, promoTextoGl, promoEnlaceTextoGl   string (versión en gallego)
  */
 import { site, type Promo } from '../data/site';
+import { esLocale } from '../i18n/ui';
 import { esCloudinary, optimizarImagenSiCloudinary, optimizarVideo } from './cloudinary';
 import { getSingleton } from './sanitySingleton';
 
@@ -35,15 +36,24 @@ interface SanityPortada {
   texto?: string | null;
   botonPrincipalTexto?: string | null;
   botonSecundarioTexto?: string | null;
+  eyebrowGl?: string | null;
+  textoGl?: string | null;
+  botonPrincipalTextoGl?: string | null;
+  botonSecundarioTextoGl?: string | null;
   promoActiva?: boolean | null;
   promoEtiqueta?: string | null;
   promoTitulo?: string | null;
   promoTexto?: string | null;
   promoEnlace?: string | null;
   promoEnlaceTexto?: string | null;
+  promoEtiquetaGl?: string | null;
+  promoTituloGl?: string | null;
+  promoTextoGl?: string | null;
+  promoEnlaceTextoGl?: string | null;
 }
 
-export async function getPortada(): Promise<Portada> {
+export async function getPortada(locale?: string): Promise<Portada> {
+  const gl = esLocale(locale) === 'gl';
   const local: Portada = {
     fondo: {
       imagen: optimizarImagenSiCloudinary(site.hero.fondo.imagen, 'w_2000'),
@@ -60,7 +70,7 @@ export async function getPortada(): Promise<Portada> {
   // El singleton es opcional: si no existe todavía, seguimos con site.ts.
   const d = await getSingleton<SanityPortada>(
     'portada',
-    `{ fondoImagenUrl, fondoVideoUrl, dosTonos, eyebrow, texto, botonPrincipalTexto, botonSecundarioTexto, promoActiva, promoEtiqueta, promoTitulo, promoTexto, promoEnlace, promoEnlaceTexto }`,
+    `{ fondoImagenUrl, fondoVideoUrl, dosTonos, eyebrow, texto, botonPrincipalTexto, botonSecundarioTexto, eyebrowGl, textoGl, botonPrincipalTextoGl, botonSecundarioTextoGl, promoActiva, promoEtiqueta, promoTitulo, promoTexto, promoEnlace, promoEnlaceTexto, promoEtiquetaGl, promoTituloGl, promoTextoGl, promoEnlaceTextoGl }`,
   );
   if (!d) return local;
 
@@ -70,18 +80,18 @@ export async function getPortada(): Promise<Portada> {
       video: optimizarVideoSiCloudinary(d.fondoVideoUrl ?? undefined) ?? local.fondo.video,
       dosTonos: d.dosTonos ?? local.fondo.dosTonos,
     },
-    eyebrow: d.eyebrow ?? local.eyebrow,
-    texto: d.texto ?? local.texto,
-    botonPrincipalTexto: d.botonPrincipalTexto ?? local.botonPrincipalTexto,
-    botonSecundarioTexto: d.botonSecundarioTexto ?? local.botonSecundarioTexto,
+    eyebrow: (gl && d.eyebrowGl) || d.eyebrow || local.eyebrow,
+    texto: (gl && d.textoGl) || d.texto || local.texto,
+    botonPrincipalTexto: (gl && d.botonPrincipalTextoGl) || d.botonPrincipalTexto || local.botonPrincipalTexto,
+    botonSecundarioTexto: (gl && d.botonSecundarioTextoGl) || d.botonSecundarioTexto || local.botonSecundarioTexto,
     promo:
       d.promoActiva && d.promoTitulo
         ? {
-            etiqueta: d.promoEtiqueta ?? '',
-            titulo: d.promoTitulo,
-            texto: d.promoTexto ?? undefined,
+            etiqueta: (gl && d.promoEtiquetaGl) || d.promoEtiqueta || '',
+            titulo: (gl && d.promoTituloGl) || d.promoTitulo,
+            texto: (gl && d.promoTextoGl) || d.promoTexto || undefined,
             enlace: d.promoEnlace ?? undefined,
-            enlaceTexto: d.promoEnlaceTexto ?? undefined,
+            enlaceTexto: (gl && d.promoEnlaceTextoGl) || d.promoEnlaceTexto || undefined,
           }
         : local.promo,
   };

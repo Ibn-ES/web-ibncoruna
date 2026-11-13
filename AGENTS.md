@@ -100,6 +100,18 @@ Reglas que hay que respetar:
 5. **Prédicas por RSS, no por la API de Spotify:** el RSS no necesita credenciales y trae el MP3, que reproduce `AudioPlayer.astro`.
 6. **URLs de Cloudinary:** se optimizan siempre con los helpers de `lib/cloudinary.ts` (`q_auto`, `f_auto`, póster desde fotograma). No construyas transformaciones a mano en los componentes.
 
+## Idiomas (gallego y español)
+
+El sitio es bilingüe: **español** es el idioma principal (rutas sin prefijo: `/`, `/predicas`) y **gallego** vive bajo `/gl/` (`/gl/`, `/gl/predicas`), configurado en `astro.config.mjs` (`i18n.routing.prefixDefaultLocale: false`).
+
+- **`src/pages/gl/`** duplica cada página de `src/pages/` (mismos componentes, misma composición) porque Astro enruta i18n por carpetas. Si añades o quitas una sección en una, hazlo también en la otra — son solo orden de componentes, no llevan textos.
+- **Dentro de un componente**, `Astro.currentLocale` ya dice en qué idioma se está renderizando; no hace falta pasarlo por props.
+- **Textos fijos del código** (botones, menú, preguntas del FAQ, formulario…): en `src/i18n/ui.ts`, un diccionario `{ es, gl }` por clave. Se usa con `useTranslations(Astro.currentLocale)` → `t('clave')`; con variables, la clave es una función `(arg) => \`...${arg}...\``.
+- **Enlaces internos**: con `localizedHref(Astro.currentLocale, '/ruta')` (añade `/gl` si toca). Para el selector de idioma, `switchLocaleHref` calcula la misma página en el otro idioma a partir de `Astro.url.pathname`.
+- **Contenido de Sanity** (hero, domingo, jóvenes, versículo, quiénes somos…): cada campo de texto traducible tiene un hermano `<campo>Gl` opcional (ver `lib/*.ts` y `studio/schemaTypes/*.ts`). Vacío, la versión en gallego usa el español; si tampoco hay nada en Sanity, usa `site.ts` (que solo está en español — por eso **nunca** dupliques `site.ts` en gallego, es el valor de respaldo mientras no haya contenido real).
+- **Fechas** (`formatFecha` en `lib/predicas.ts`, mes en `EpisodeCover.astro`): reciben `Astro.currentLocale` y usan el tag de `Intl` (`es-ES` / `gl-ES`) correspondiente.
+- Las traducciones al gallego de `ui.ts` y de los textos de ejemplo son una primera versión hecha por el agente, no por un hablante nativo: que alguien de la iglesia las revise antes de que el sitio se use de verdad en gallego.
+
 ## Contenido y huecos
 
 - Los datos que la iglesia aún no ha dado van **entre corchetes**: `[HORA]`, `[DIRECCIÓN]`, `[NOMBRE]`…
@@ -224,5 +236,5 @@ Reglas que hay que respetar:
 - Fotos y vídeo del hero.
 - Envío del formulario «Planifica tu visita» (`site.contacto.formAction`) y página de política de privacidad.
 - Contenido real de los documentos de Sanity (el schema y el webhook de rebuild ya están listos): `testimonio`, `portada`, `lema`, `domingo`, `jovenes`, `contacto`, `predicasEnlaces`, `versiculo`, `esencia`.
-- Decisión de la directiva sobre paleta y letra de lectura. Cuando se decida: `defaultPalette` y `showPaletteSwitcher: false` en `site.ts`.
+- Decisión de la directiva sobre la letra de lectura (paleta ya decidida: Atlántico, `defaultPalette: 'a'`, selector apagado).
 - Dominio definitivo en `astro.config.mjs`. 

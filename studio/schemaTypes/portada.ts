@@ -3,6 +3,8 @@ import { defineField, defineType } from 'sanity';
 /**
  * Singleton: fondo del hero y tarjeta de promoción de la portada.
  * Los campos coinciden con los que lee src/lib/portada.ts en el sitio.
+ * Los campos "(gallego)" son opcionales: vacíos, la versión en gallego de la
+ * web usa el texto en español.
  */
 export default defineType({
   name: 'portada',
@@ -34,8 +36,19 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'eyebrowGl',
+      title: 'Etiqueta sobre el titular (gallego)',
+      type: 'string',
+    }),
+    defineField({
       name: 'texto',
       title: 'Texto bajo el titular',
+      type: 'text',
+      rows: 3,
+    }),
+    defineField({
+      name: 'textoGl',
+      title: 'Texto bajo el titular (gallego)',
       type: 'text',
       rows: 3,
     }),
@@ -46,9 +59,19 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'botonPrincipalTextoGl',
+      title: 'Texto del botón principal (gallego)',
+      type: 'string',
+    }),
+    defineField({
       name: 'botonSecundarioTexto',
       title: 'Texto del botón secundario',
       description: 'Lleva a "¿Primera vez?".',
+      type: 'string',
+    }),
+    defineField({
+      name: 'botonSecundarioTextoGl',
+      title: 'Texto del botón secundario (gallego)',
       type: 'string',
     }),
     defineField({
@@ -66,8 +89,20 @@ export default defineType({
       hidden: ({ document }) => !document?.promoActiva,
     }),
     defineField({
+      name: 'promoEtiquetaGl',
+      title: 'Etiqueta (gallego)',
+      type: 'string',
+      hidden: ({ document }) => !document?.promoActiva,
+    }),
+    defineField({
       name: 'promoTitulo',
       title: 'Título',
+      type: 'string',
+      hidden: ({ document }) => !document?.promoActiva,
+    }),
+    defineField({
+      name: 'promoTituloGl',
+      title: 'Título (gallego)',
       type: 'string',
       hidden: ({ document }) => !document?.promoActiva,
     }),
@@ -79,8 +114,16 @@ export default defineType({
       hidden: ({ document }) => !document?.promoActiva,
     }),
     defineField({
+      name: 'promoTextoGl',
+      title: 'Texto (gallego)',
+      type: 'text',
+      rows: 2,
+      hidden: ({ document }) => !document?.promoActiva,
+    }),
+    defineField({
       name: 'promoEnlace',
       title: 'Enlace',
+      description: 'El mismo enlace vale para las dos versiones del sitio.',
       type: 'url',
       hidden: ({ document }) => !document?.promoActiva,
     }),
@@ -88,6 +131,12 @@ export default defineType({
       name: 'promoEnlaceTexto',
       title: 'Texto del enlace',
       description: 'Por defecto: "Más información".',
+      type: 'string',
+      hidden: ({ document }) => !document?.promoActiva,
+    }),
+    defineField({
+      name: 'promoEnlaceTextoGl',
+      title: 'Texto del enlace (gallego)',
       type: 'string',
       hidden: ({ document }) => !document?.promoActiva,
     }),

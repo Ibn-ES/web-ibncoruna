@@ -3,6 +3,7 @@
  *
  * Documento "contacto" en Sanity (singleton, _type == "contacto"), campos:
  *   whatsapp, whatsappUrl, instagram, email, formAction   string
+ * Ninguno de estos campos se traduce (son números, enlaces y usuarios).
  */
 import { site } from '../data/site';
 import { getSingleton } from './sanitySingleton';
@@ -17,7 +18,7 @@ export interface Contacto {
 
 type SanityContacto = Partial<Record<keyof Contacto, string | null>>;
 
-export async function getContacto(): Promise<Contacto> {
+export async function getContacto(_locale?: string): Promise<Contacto> {
   const local = site.contacto;
   const d = await getSingleton<SanityContacto>(
     'contacto',

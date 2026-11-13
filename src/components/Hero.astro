@@ -4,10 +4,12 @@ import Wave from './Wave.astro';
 import { getPortada } from '../lib/portada';
 import { getLema } from '../lib/lema';
 import { getDomingo } from '../lib/domingo';
+import { useTranslations } from '../i18n/ui';
 
-const { fondo, eyebrow, texto, botonPrincipalTexto, botonSecundarioTexto, promo } = await getPortada();
-const lema = await getLema();
-const domingo = await getDomingo();
+const { fondo, eyebrow, texto, botonPrincipalTexto, botonSecundarioTexto, promo } = await getPortada(Astro.currentLocale);
+const lema = await getLema(Astro.currentLocale);
+const domingo = await getDomingo(Astro.currentLocale);
+const t = useTranslations(Astro.currentLocale);
 const conFondo = Boolean(fondo.imagen || fondo.video);
 ---
 
@@ -67,7 +69,7 @@ const conFondo = Boolean(fondo.imagen || fondo.video);
     promo ? (
       <aside
         class="hero__card absolute bottom-[clamp(16px,4vw,48px)] right-[clamp(16px,4vw,56px)] flex max-w-[340px] flex-col gap-[6px] rounded-[22px] border border-[color-mix(in_srgb,#fff_18%,transparent)] bg-[color-mix(in_srgb,var(--deep)_55%,transparent)] p-[20px_24px] backdrop-blur-[14px] max-[720px]:static max-[720px]:mx-[var(--gutter)] max-[720px]:mt-12 max-[720px]:max-w-none"
-        aria-label={promo.etiqueta || 'Anuncio'}
+        aria-label={promo.etiqueta || t('hero.anuncio')}
       >
         {promo.etiqueta && (
           <span class="inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.18em] text-warm">
@@ -79,7 +81,7 @@ const conFondo = Boolean(fondo.imagen || fondo.video);
         {promo.texto && <span class="text-base text-[color-mix(in_srgb,#fff_82%,var(--mist))]">{promo.texto}</span>}
         {promo.enlace && (
           <a href={promo.enlace} class="group mt-[6px] inline-flex min-h-11 items-center gap-2 font-display font-bold text-warm no-underline">
-            {promo.enlaceTexto ?? 'Más información'}{' '}
+            {promo.enlaceTexto ?? t('hero.masInformacion')}{' '}
             <span class="arrow inline-block transition-transform duration-[0.35s] ease-out group-hover:translate-x-1" aria-hidden="true">→</span>
           </a>
         )}
@@ -87,13 +89,13 @@ const conFondo = Boolean(fondo.imagen || fondo.video);
     ) : (
       <aside
         class="hero__card absolute bottom-[clamp(16px,4vw,48px)] right-[clamp(16px,4vw,56px)] flex max-w-[300px] flex-col gap-[6px] rounded-[22px] border border-[color-mix(in_srgb,#fff_18%,transparent)] bg-[color-mix(in_srgb,var(--deep)_55%,transparent)] p-[20px_24px] backdrop-blur-[14px] max-[720px]:static max-[720px]:mx-[var(--gutter)] max-[720px]:mt-12 max-[720px]:max-w-none"
-        aria-label="Este domingo"
+        aria-label={t('hero.esteDomingo')}
       >
         <span class="inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.18em] text-warm">
           <span class="dot h-2 w-2 rounded-full bg-warm" aria-hidden="true" />
-          Este domingo
+          {t('hero.esteDomingo')}
         </span>
-        <strong class="font-display text-2xl font-extrabold leading-[1.15] tracking-[-0.02em]">Te guardamos sitio.</strong>
+        <strong class="font-display text-2xl font-extrabold leading-[1.15] tracking-[-0.02em]">{t('hero.teGuardamosSitio')}</strong>
         <span class="text-base text-[color-mix(in_srgb,#fff_82%,var(--mist))]">
           {domingo.hora} · {domingo.direccion}
         </span>

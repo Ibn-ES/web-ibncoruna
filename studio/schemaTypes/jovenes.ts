@@ -2,7 +2,7 @@ import { defineField, defineType } from 'sanity';
 
 /**
  * Singleton: datos del grupo de jóvenes. Los campos coinciden con los que
- * lee src/lib/jovenes.ts en el sitio.
+ * lee src/lib/jovenes.ts en el sitio. El usuario de Instagram no se traduce.
  */
 export default defineType({
   name: 'jovenes',
@@ -16,8 +16,18 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'nombreGl',
+      title: 'Nombre del grupo (gallego)',
+      type: 'string',
+    }),
+    defineField({
       name: 'cuando',
       title: 'Día y hora',
+      type: 'string',
+    }),
+    defineField({
+      name: 'cuandoGl',
+      title: 'Día y hora (gallego)',
       type: 'string',
     }),
     defineField({

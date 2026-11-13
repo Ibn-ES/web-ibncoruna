@@ -15,7 +15,7 @@ export interface PredicasEnlaces {
 
 type SanityPredicasEnlaces = Partial<Record<keyof PredicasEnlaces, string | null>>;
 
-export async function getPredicasEnlaces(): Promise<PredicasEnlaces> {
+export async function getPredicasEnlaces(_locale?: string): Promise<PredicasEnlaces> {
   const local = site.predicas;
   const d = await getSingleton<SanityPredicasEnlaces>('predicasEnlaces', `{ spotifyUrl, applePodcastsUrl }`);
   if (!d) return local;

@@ -1,9 +1,11 @@
 ---
 import { getVersiculo } from '../lib/versiculo';
-const v = await getVersiculo();
+import { useTranslations } from '../i18n/ui';
+const v = await getVersiculo(Astro.currentLocale);
+const t = useTranslations(Astro.currentLocale);
 ---
 
-<section class="panel on-dark bg-band py-[clamp(90px,11vw,150px)] text-white" aria-label="Versículo">
+<section class="panel on-dark bg-band py-[clamp(90px,11vw,150px)] text-white" aria-label={t('versiculo.aria')}>
   <svg class="absolute inset-0 z-[-1] h-full w-full" viewBox="0 0 1440 400" preserveAspectRatio="none" aria-hidden="true">
     {[80, 140, 200, 260, 320].map((y) => (
       <path class="fill-none stroke-white opacity-[0.14]" stroke-width="1.5" d={`M-40 ${y} C 200 ${y - 30}, 440 ${y - 30}, 680 ${y} S 1160 ${y + 30}, 1480 ${y}`} />

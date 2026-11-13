@@ -3,6 +3,8 @@
  * Portada de un episodio. Si el RSS trae imagen, se usa; si no, se genera
  * una con los colores de la paleta (fecha grande + la ola).
  */
+import { useTranslations } from '../i18n/ui';
+
 interface Props {
   imagen?: string;
   fecha: Date;
@@ -11,8 +13,10 @@ interface Props {
   size?: 's' | 'l';
 }
 const { imagen, fecha, class: className = '', size = 's' } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
 const dia = fecha.getDate();
-const mes = new Intl.DateTimeFormat('es-ES', { month: 'short' }).format(fecha).replace('.', '');
+const mesTag = Astro.currentLocale === 'gl' ? 'gl-ES' : 'es-ES';
+const mes = new Intl.DateTimeFormat(mesTag, { month: 'short' }).format(fecha).replace('.', '');
 const radius = size === 'l' ? 'rounded-[22px]' : 'rounded-[14px]';
 ---
 
@@ -25,7 +29,7 @@ const radius = size === 'l' ? 'rounded-[22px]' : 'rounded-[14px]';
       aria-hidden="true"
     >
       <span class="absolute left-[10cqi] top-[10cqi] text-[max(7px,7.5cqi)] font-bold uppercase tracking-[0.16em] text-warm @max-[120px]:hidden">
-        Prédica
+        {t('episodeCover.predica')}
       </span>
       <span class="absolute bottom-[9cqi] left-[10cqi] flex flex-col leading-[0.85] @max-[120px]:inset-0 @max-[120px]:items-center @max-[120px]:justify-center">
         <b class="text-[38cqi] font-extrabold tracking-[-0.06em] @max-[120px]:text-[44cqi]">{dia}</b>

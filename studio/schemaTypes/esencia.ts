@@ -21,6 +21,8 @@ export default defineType({
           fields: [
             defineField({ name: 'titulo', title: 'Título', type: 'string', validation: (Rule) => Rule.required() }),
             defineField({ name: 'texto', title: 'Texto', type: 'string', validation: (Rule) => Rule.required() }),
+            defineField({ name: 'tituloGl', title: 'Título (gallego)', type: 'string' }),
+            defineField({ name: 'textoGl', title: 'Texto (gallego)', type: 'string' }),
           ],
           preview: {
             select: { title: 'titulo', subtitle: 'texto' },
