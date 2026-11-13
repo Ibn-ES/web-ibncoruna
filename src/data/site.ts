@@ -53,7 +53,7 @@ export const site = {
     /** Tarjeta flotante para anunciar algo. null = tarjeta "Este domingo". */
     promo: null as Promo | null,
     eyebrow: 'Iglesia en A Coruña · fe, no religión',
-    texto: 'Una iglesia con Cristo en el centro, de tú a tú. Da igual si llevas toda la vida en la fe o si nunca has pisado una iglesia: ven como eres, te guardamos sitio.',
+    texto: 'Una iglesia con Cristo en el centro, de tú a tú. Da igual si llevas toda la vida en la fe o si nunca has pisado una iglesia: ven como eres, te esperamos.',
     botonPrincipalTexto: 'Planifica tu visita',
     botonSecundarioTexto: '¿Primera vez?',
   },
@@ -89,6 +89,12 @@ export const site = {
     email: '[EMAIL]',
     /** Endpoint que recibirá el formulario "Planifica tu visita" (Directus, Formspree…). */
     formAction: '#',
+  },
+
+  /** Aviso legal y política de privacidad: de momento viven en la web principal. */
+  legal: {
+    avisoUrl: 'https://ibnbuenasnoticias.com/legal',
+    privacidadUrl: 'https://ibnbuenasnoticias.com/privacidad',
   },
 
   predicas: {

@@ -32,7 +32,7 @@ Requiere Node ≥ 22.23 (lo pide Astro 7).
 - **Tailwind v4**, con las utilidades directamente en el `class` del marcado. Los tokens de marca (paletas, tipografía, radios) viven en `global.css` como custom properties y se exponen a Tailwind con `@theme inline`, así `bg-deep` o `text-warm` siguen el cambio de paleta en vivo. Solo queda CSS en un `<style>` por componente para lo que Tailwind no cubre (`@keyframes`, `::details-content`…).
 - **Poco JavaScript.**
   - El menú móvil usa la Popover API nativa, las preguntas frecuentes `<details>` y las animaciones de scroll son CSS (`animation-timeline`).
-  - Solo llevan script el reproductor de audio, el carrusel de testimonios y el selector de paleta. En navegadores que no las soportan, el contenido simplemente aparece sin animar. Con "reducir movimiento" activado no se mueve nada.
+  - Solo llevan script el reproductor de audio, el carrusel de testimonios, el selector de paleta, el selector de idioma y el aviso de privacidad. En navegadores que no las soportan, el contenido simplemente aparece sin animar. Con "reducir movimiento" activado no se mueve nada.
 - **Fuentes servidas desde la propia web** (`@fontsource-variable`), no desde Google Fonts: más rápido y sin enviar datos de visitantes a Google (RGPD).
 - **Base blanca.** El fondo es blanco; las superficies usan un velo muy suave de la bruma (`--surface`). La arena de la marca queda solo como token.
 - **Paletas como variables CSS.** `data-palette="a|b|c"` en `<html>` cambia todos los colores. Los nombres son neutros (`--band`, `--deep`, `--warm`…) para no reescribir CSS cuando la directiva elija.
@@ -85,7 +85,7 @@ El hero puede llevar **foto o vídeo de fondo** y una **tarjeta para anunciar** 
 - [ ] Rellenar los `[HUECOS]` de `site.ts` (hora, dirección, duración, niños, WhatsApp, testimonio).
 - [ ] Sustituir el trazo provisional de la ola (`Wave.astro`) por el trazo real de la firma.
 - [ ] Fotos reales: `<Photo src="…">`. Las de ciudad y mar, con `duotone`; las de personas, a color natural. Niños siempre sin caras.
-- [ ] Conectar el formulario "Planifica tu visita" (`site.contacto.formAction`) y redactar la política de privacidad.
+- [ ] Conectar el formulario "Planifica tu visita" (`site.contacto.formAction`). El aviso legal y la política de privacidad ya enlazan a la web principal (`site.legal`).
 - [ ] Si la directiva elige Merriweather o Nunito como letra de lectura: cambiar el import en `Layout.astro` y `--font-body` en `global.css`.
 - [ ] Poner el dominio definitivo en `astro.config.mjs`.
 - [ ] `SPOTIFY_RSS_URL` y los enlaces de Spotify / Apple Podcasts en `site.ts` (`predicas`).

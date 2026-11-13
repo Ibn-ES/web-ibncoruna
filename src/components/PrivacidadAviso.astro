@@ -1,0 +1,45 @@
+---
+/**
+ * Aviso de privacidad en la primera visita. Hoy el sitio no usa cookies de
+ * rastreo ni analítica de terceros, pero se avisa igual y se enlaza a la
+ * política de privacidad de la web principal (site.legal.privacidadUrl).
+ * Se recuerda en localStorage para no volver a salir en este navegador.
+ */
+import { site } from '../data/site';
+import { useTranslations } from '../i18n/ui';
+const t = useTranslations(Astro.currentLocale);
+---
+
+<div
+  id="aviso-privacidad"
+  hidden
+  class="fixed inset-x-[var(--inset)] bottom-[var(--inset)] z-[65] mx-auto flex max-w-[640px] flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-[color-mix(in_srgb,#fff_92%,transparent)] px-6 py-5 text-deep shadow-[0_20px_60px_-24px_color-mix(in_srgb,var(--deep)_55%,transparent)] backdrop-blur-[18px]"
+  role="region"
+  aria-label={t('privacidad.texto')}
+>
+  <p class="m-0 flex-1 basis-[240px] text-[0.9375rem] leading-[1.5]">
+    {t('privacidad.texto')}
+    {' '}
+    <a class="font-semibold text-deep underline" href={site.legal.privacidadUrl} target="_blank" rel="noopener">{t('privacidad.masInfo')}</a>
+  </p>
+  <button type="button" id="aviso-privacidad-ok" class="btn min-h-11 shrink-0 px-6">{t('privacidad.entendido')}</button>
+</div>
+
+<script>
+  const CLAVE = 'bn-privacidad-ok';
+  const aviso = document.getElementById('aviso-privacidad');
+  const boton = document.getElementById('aviso-privacidad-ok');
+
+  try {
+    if (!localStorage.getItem(CLAVE)) aviso?.removeAttribute('hidden');
+  } catch {
+    aviso?.removeAttribute('hidden');
+  }
+
+  boton?.addEventListener('click', () => {
+    aviso?.setAttribute('hidden', '');
+    try {
+      localStorage.setItem(CLAVE, '1');
+    } catch {}
+  });
+</script>

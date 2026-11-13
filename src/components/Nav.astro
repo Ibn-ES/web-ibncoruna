@@ -33,7 +33,7 @@ const hrefIdioma = (l: (typeof locales)[number]) =>
           <a
             href={href(item.href)}
             aria-current={item.href === current ? 'page' : undefined}
-            class="block rounded-full px-3 py-3 font-display text-[0.9375rem] font-semibold no-underline transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--deep)_8%,transparent)] aria-[current=page]:bg-deep aria-[current=page]:text-white"
+            class="block whitespace-nowrap rounded-full px-3 py-3 font-display text-[0.9375rem] font-semibold no-underline transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--deep)_8%,transparent)] aria-[current=page]:bg-deep aria-[current=page]:text-white"
           >
             {t(`nav.${item.key}`)}
           </a>
@@ -43,7 +43,7 @@ const hrefIdioma = (l: (typeof locales)[number]) =>
 
     <details class="lang-dropdown relative hidden min-[640px]:block max-[1160px]:hidden">
       <summary
-        class="flex min-h-[46px] cursor-pointer list-none items-center gap-2 rounded-full px-3 font-display text-[0.9375rem] font-bold uppercase tracking-[0.04em] [&::-webkit-details-marker]:hidden hover:bg-[color-mix(in_srgb,var(--deep)_8%,transparent)]"
+        class="flex min-h-[46px] cursor-pointer list-none items-center gap-2 whitespace-nowrap rounded-full px-3 font-display text-[0.9375rem] font-bold uppercase tracking-[0.04em] [&::-webkit-details-marker]:hidden hover:bg-[color-mix(in_srgb,var(--deep)_8%,transparent)]"
         aria-label={t('idioma.seleccionar')}
       >
         <Flag locale={actual} />
