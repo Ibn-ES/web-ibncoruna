@@ -1,6 +1,10 @@
 ---
 import Photo from './Photo.astro';
-import { site } from '../data/site';
+import { getDomingo } from '../lib/domingo';
+import { getJovenes } from '../lib/jovenes';
+
+const domingo = await getDomingo();
+const jovenes = await getJovenes();
 ---
 
 <section class="pb-[clamp(80px,10vw,140px)] pt-[clamp(120px,14vw,180px)]" aria-labelledby="semana-title">
@@ -16,9 +20,19 @@ import { site } from '../data/site';
     <div class="grid grid-cols-12 gap-4 [grid-auto-rows:minmax(300px,auto)] max-[900px]:grid-cols-1">
       <!-- Domingos -->
       <article class="reveal group relative col-span-7 row-span-2 flex cursor-pointer flex-col overflow-hidden rounded-[var(--radius-l)] bg-mist transition-[transform,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_30px_60px_-36px_color-mix(in_srgb,var(--deep)_70%,transparent)] max-[900px]:col-auto max-[900px]:row-auto">
-        <Photo label="un domingo real, gente sin posar" class="m-[12px_12px_0] min-h-[280px] flex-1 basis-[280px] max-[900px]:min-h-[240px]" tone="soft" />
+        {
+          domingo.fotoDestacadaUrl ? (
+            <img
+              src={domingo.fotoDestacadaUrl}
+              alt=""
+              class="m-[12px_12px_0] min-h-[280px] flex-1 basis-[280px] rounded-[calc(var(--radius-l)-12px)] object-cover max-[900px]:min-h-[240px]"
+            />
+          ) : (
+            <Photo label="un domingo real, gente sin posar" class="m-[12px_12px_0] min-h-[280px] flex-1 basis-[280px] max-[900px]:min-h-[240px]" tone="soft" />
+          )
+        }
         <div class="relative mt-auto flex flex-col items-start gap-3 p-[clamp(24px,3vw,36px)]">
-          <span class="inline-flex min-h-8 items-center rounded-full bg-btn px-[14px] font-display text-[0.8125rem] font-semibold text-white">{site.domingo.hora} · {site.domingo.direccion}</span>
+          <span class="inline-flex min-h-8 items-center rounded-full bg-btn px-[14px] font-display text-[0.8125rem] font-semibold text-white">{domingo.hora} · {domingo.direccion}</span>
           <h3 class="display-m">Domingos</h3>
           <p class="max-w-[30rem]">Un culto para toda la familia. Hablamos de Jesús con palabras de todos los días.</p>
           <a href="#visitanos" class="relative mt-2 inline-flex min-h-11 items-center gap-2 font-display text-base font-bold text-accent no-underline after:absolute after:inset-0 after:content-['']">
@@ -36,11 +50,11 @@ import { site } from '../data/site';
           ¿?
         </span>
         <div class="relative mt-auto flex flex-col items-start gap-3 p-[clamp(24px,3vw,36px)]">
-          <span class="inline-flex min-h-8 items-center rounded-full bg-deep px-[14px] font-display text-[0.8125rem] font-semibold text-white">{site.jovenes.cuando}</span>
-          <h3 class="display-m">{site.jovenes.nombre}</h3>
+          <span class="inline-flex min-h-8 items-center rounded-full bg-deep px-[14px] font-display text-[0.8125rem] font-semibold text-white">{jovenes.cuando}</span>
+          <h3 class="display-m">{jovenes.nombre}</h3>
           <p class="max-w-[30rem]">Amigos, preguntas y fe. Preguntas sin filtro: aquí no hay preguntas tontas.</p>
-          <a href={`https://instagram.com/${site.jovenes.instagram}`} class="relative mt-2 inline-flex min-h-11 items-center gap-2 font-display text-base font-bold no-underline after:absolute after:inset-0 after:content-['']">
-            @{site.jovenes.instagram} <span class="arrow inline-block transition-transform duration-[0.35s] ease-out group-hover:translate-x-1" aria-hidden="true">↗</span>
+          <a href={`https://instagram.com/${jovenes.instagram}`} class="relative mt-2 inline-flex min-h-11 items-center gap-2 font-display text-base font-bold no-underline after:absolute after:inset-0 after:content-['']">
+            @{jovenes.instagram} <span class="arrow inline-block transition-transform duration-[0.35s] ease-out group-hover:translate-x-1" aria-hidden="true">↗</span>
           </a>
         </div>
       </article>

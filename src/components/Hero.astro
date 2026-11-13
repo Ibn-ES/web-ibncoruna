@@ -1,10 +1,13 @@
 ---
 import SeaScene from './SeaScene.astro';
 import Wave from './Wave.astro';
-import { site } from '../data/site';
 import { getPortada } from '../lib/portada';
+import { getLema } from '../lib/lema';
+import { getDomingo } from '../lib/domingo';
 
-const { fondo, promo } = await getPortada();
+const { fondo, eyebrow, texto, botonPrincipalTexto, botonSecundarioTexto, promo } = await getPortada();
+const lema = await getLema();
+const domingo = await getDomingo();
 const conFondo = Boolean(fondo.imagen || fondo.video);
 ---
 
@@ -41,25 +44,22 @@ const conFondo = Boolean(fondo.imagen || fondo.video);
   }
 
   <div class="container relative">
-    <p class="eyebrow">Iglesia en A Coruña · fe, no religión</p>
+    <p class="eyebrow">{eyebrow}</p>
 
     <h1 id="hero-title" class="display-xl mt-5 max-w-[11ch] text-[clamp(3.25rem,9vw,8.25rem)]">
-      {site.lema.principal}
+      {lema.principal}
     </h1>
 
     <p class="mt-[18px] inline-flex flex-col gap-[6px] font-display text-[clamp(1.5rem,3vw,2.5rem)] font-semibold leading-[1.15] tracking-[-0.02em]">
-      <span>{site.lema.secundario}</span>
+      <span>{lema.secundario}</span>
       <Wave width={300} strokeWidth={6} draw={false} class="w-[min(300px,70vw)]" />
     </p>
 
-    <p class="lead mt-7 max-w-[36rem] text-[color-mix(in_srgb,#fff_84%,var(--mist))]">
-      Una iglesia con Cristo en el centro, de tú a tú. Da igual si llevas toda la vida en la fe o si nunca has pisado
-      una iglesia: ven como eres, te guardamos sitio.
-    </p>
+    <p class="lead mt-7 max-w-[36rem] text-[color-mix(in_srgb,#fff_84%,var(--mist))]">{texto}</p>
 
     <div class="mt-10 flex flex-wrap gap-3">
-      <a href="#contacto" class="btn btn--warm">Planifica tu visita <span class="arrow" aria-hidden="true">→</span></a>
-      <a href="#visitanos" class="btn btn--ghost">¿Primera vez?</a>
+      <a href="#contacto" class="btn btn--warm">{botonPrincipalTexto} <span class="arrow" aria-hidden="true">→</span></a>
+      <a href="#visitanos" class="btn btn--ghost">{botonSecundarioTexto}</a>
     </div>
   </div>
 
@@ -95,7 +95,7 @@ const conFondo = Boolean(fondo.imagen || fondo.video);
         </span>
         <strong class="font-display text-2xl font-extrabold leading-[1.15] tracking-[-0.02em]">Te guardamos sitio.</strong>
         <span class="text-base text-[color-mix(in_srgb,#fff_82%,var(--mist))]">
-          {site.domingo.hora} · {site.domingo.direccion}
+          {domingo.hora} · {domingo.direccion}
         </span>
       </aside>
     )

@@ -1,6 +1,6 @@
 ---
-import { site } from '../data/site';
-const v = site.versiculo;
+import { getVersiculo } from '../lib/versiculo';
+const v = await getVersiculo();
 ---
 
 <section class="panel on-dark bg-band py-[clamp(90px,11vw,150px)] text-white" aria-label="Versículo">

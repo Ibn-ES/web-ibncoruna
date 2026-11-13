@@ -1,6 +1,9 @@
 ---
-import { site } from '../data/site';
-const { domingo, contacto } = site;
+import { getDomingo } from '../lib/domingo';
+import { getContacto } from '../lib/contacto';
+
+const domingo = await getDomingo();
+const contacto = await getContacto();
 
 const datos = [
   { label: 'Dirección', value: domingo.direccionCompleta, href: domingo.mapaUrl },

@@ -52,6 +52,10 @@ export const site = {
     },
     /** Tarjeta flotante para anunciar algo. null = tarjeta "Este domingo". */
     promo: null as Promo | null,
+    eyebrow: 'Iglesia en A Coruña · fe, no religión',
+    texto: 'Una iglesia con Cristo en el centro, de tú a tú. Da igual si llevas toda la vida en la fe o si nunca has pisado una iglesia: ven como eres, te guardamos sitio.',
+    botonPrincipalTexto: 'Planifica tu visita',
+    botonSecundarioTexto: '¿Primera vez?',
   },
 
   lema: {
@@ -68,6 +72,8 @@ export const site = {
     ninos: '[QUÉ HAY PARA LOS NIÑOS]',
     resumen: '[Dos o tres frases sobre cómo es un domingo, con palabras de todos los días]',
     mapaUrl: '#', // enlace a Google Maps / OpenStreetMap
+    /** Foto real de un domingo (p. ej. la última de Instagram). Vacío = no se muestra. */
+    fotoDestacadaUrl: '',
   },
 
   jovenes: {

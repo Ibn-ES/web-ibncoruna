@@ -1,12 +1,14 @@
 ---
-import { site } from '../data/site';
+import { getDomingo } from '../lib/domingo';
+
+const domingo = await getDomingo();
 
 const preguntas = [
-  { q: '¿Cuándo es?', a: `Los domingos a las ${site.domingo.hora}. Ven cuando quieras, te guardamos sitio.`, open: true },
-  { q: '¿Dónde estáis?', a: site.domingo.direccionCompleta, link: { href: site.domingo.mapaUrl, label: 'Cómo llegar ↗' } },
-  { q: '¿Cuánto dura?', a: site.domingo.duracion },
-  { q: '¿Qué pasa en un domingo?', a: site.domingo.resumen },
-  { q: '¿Y si vengo con niños?', a: site.domingo.ninos },
+  { q: '¿Cuándo es?', a: `Los domingos a las ${domingo.hora}. Ven cuando quieras, te guardamos sitio.`, open: true },
+  { q: '¿Dónde estáis?', a: domingo.direccionCompleta, link: { href: domingo.mapaUrl, label: 'Cómo llegar ↗' } },
+  { q: '¿Cuánto dura?', a: domingo.duracion },
+  { q: '¿Qué pasa en un domingo?', a: domingo.resumen },
+  { q: '¿Y si vengo con niños?', a: domingo.ninos },
   { q: '¿Tengo que saber algo antes?', a: 'No. Ven como eres y trae a quien quieras.' },
 ];
 ---

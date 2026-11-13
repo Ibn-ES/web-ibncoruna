@@ -1,7 +1,14 @@
 ---
 import Logo from './Logo.astro';
 import { site } from '../data/site';
+import { getLema } from '../lib/lema';
+import { getJovenes } from '../lib/jovenes';
+import { getContacto } from '../lib/contacto';
+
 const year = new Date().getFullYear();
+const lema = await getLema();
+const jovenes = await getJovenes();
+const contacto = await getContacto();
 ---
 
 <footer class="on-dark bg-deep pb-8 pt-[clamp(64px,8vw,100px)] text-white">
@@ -9,16 +16,16 @@ const year = new Date().getFullYear();
     <div class="flex flex-wrap justify-between gap-10">
       <div>
         <Logo size="l" tone="white" />
-        <p class="mt-5 max-w-[22rem] text-[color-mix(in_srgb,#fff_82%,var(--mist))]">{site.lema.principal} {site.lema.secundario}</p>
+        <p class="mt-5 max-w-[22rem] text-[color-mix(in_srgb,#fff_82%,var(--mist))]">{lema.principal} {lema.secundario}</p>
       </div>
       <nav aria-label="Pie de página" class="flex gap-[clamp(40px,8vw,120px)]">
         <ul class="m-0 list-none p-0" role="list">
           {site.nav.map((i) => <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={i.href}>{i.label}</a></li>)}
         </ul>
         <ul class="m-0 list-none p-0" role="list">
-          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${site.contacto.instagram}`}>@{site.contacto.instagram}</a></li>
-          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${site.jovenes.instagram}`}>@{site.jovenes.instagram}</a></li>
-          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={site.contacto.whatsappUrl}>WhatsApp</a></li>
+          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${contacto.instagram}`}>@{contacto.instagram}</a></li>
+          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${jovenes.instagram}`}>@{jovenes.instagram}</a></li>
+          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={contacto.whatsappUrl}>WhatsApp</a></li>
         </ul>
       </nav>
     </div>

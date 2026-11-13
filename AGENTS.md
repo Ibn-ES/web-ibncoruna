@@ -58,13 +58,22 @@ studio/                     Sanity Studio: app aparte, con su propio package.jso
 | Prédicas | RSS de Spotify for Creators | `SPOTIFY_RSS_URL` | datos de ejemplo |
 | Testimonios | Sanity, documentos `testimonio` | `SANITY_PROJECT_ID`, `SANITY_DATASET`, `SANITY_TOKEN` | Cloudinary por etiqueta |
 | | Cloudinary (vídeos con una etiqueta) | `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_TESTIMONIOS_TAG` | datos de ejemplo |
-| Hero (fondo + promo) | Sanity, documento singleton `portada` | `SANITY_PROJECT_ID` | `site.hero` |
+| Hero (fondo, textos, botones, promo) | Sanity, singleton `portada` (`lib/portada.ts`) | `SANITY_PROJECT_ID` | `site.hero` |
+| Lema (titular, pie, banda de frases) | Sanity, singleton `lema` (`lib/lema.ts`) | `SANITY_PROJECT_ID` | `site.lema` |
+| Domingo (hora, dirección, qué esperar) | Sanity, singleton `domingo` (`lib/domingo.ts`) | `SANITY_PROJECT_ID` | `site.domingo` |
+| Jóvenes | Sanity, singleton `jovenes` (`lib/jovenes.ts`) | `SANITY_PROJECT_ID` | `site.jovenes` |
+| Contacto | Sanity, singleton `contacto` (`lib/contacto.ts`) | `SANITY_PROJECT_ID` | `site.contacto` |
+| Prédicas, enlaces (Spotify/Apple) | Sanity, singleton `predicasEnlaces` (`lib/predicasEnlaces.ts`) | `SANITY_PROJECT_ID` | `site.predicas` |
+| Versículo | Sanity, singleton `versiculo` (`lib/versiculo.ts`) | `SANITY_PROJECT_ID` | `site.versiculo` |
+| Quiénes somos (esencia) | Sanity, singleton `esencia` (`lib/esencia.ts`) | `SANITY_PROJECT_ID` | `site.esencia` |
+
+El **nav** (`site.nav`) se queda fijo en código a propósito: son las anclas/rutas del propio sitio, no contenido editorial.
 
 Copia `.env.example` a `.env`. **Nunca subas `.env`.** Los campos de cada tipo de documento de Sanity están documentados en el comentario de cabecera de su fichero en `lib/` (y en el propio schema de `studio/`). El proyecto de Sanity es `na5c11mv` (dataset `production`, público: no hace falta token para leer).
 
 ### Sanity Studio (`studio/`)
 
-App aparte dentro del mismo repo, con su propio `package.json` (no es un workspace de npm: se instala y se corre por separado). Desplegado en **https://ibncoruna.sanity.studio/** — ahí es donde se edita el contenido (testimonios y portada), no hace falta tocar código para eso.
+App aparte dentro del mismo repo, con su propio `package.json` (no es un workspace de npm: se instala y se corre por separado). Desplegado en **https://ibncoruna.sanity.studio/** — ahí es donde se edita todo el contenido de la portada (hero, lema, domingo, jóvenes, contacto, prédicas, versículo, quiénes somos, testimonios), no hace falta tocar código para eso.
 
 ```bash
 cd studio
@@ -73,15 +82,15 @@ npm run dev       # http://localhost:3333
 npm run deploy    # publica los cambios de schema en https://ibncoruna.sanity.studio/
 ```
 
-- `schemaTypes/portada.ts` y `schemaTypes/testimonio.ts`: definen los mismos campos que leen `lib/portada.ts` y `lib/testimonios.ts`. Si cambias un campo en un lado, cámbialo en el otro.
-- `portada` es un **singleton**: `structure.ts` lo abre siempre con `documentId` fijo (`"portada"`) y `sanity.config.ts` quita la opción de crear uno nuevo desde el menú global. No hace falta (ni se puede, desde la UI) crear un segundo documento `portada`.
-- `testimonio` es una colección normal; el orden de publicación lo decide Sanity (no hace falta campo de estado, a diferencia de lo que habría sido con Directus).
+- Cada fichero de `schemaTypes/` define los mismos campos que lee su `lib/*.ts` correspondiente (mismo nombre: `domingo.ts` ↔ `domingo.ts`, etc.). Si cambias un campo en un lado, cámbialo en el otro.
+- `portada`, `lema`, `domingo`, `jovenes`, `contacto`, `predicasEnlaces`, `versiculo` y `esencia` son **singletons**: `structure.ts` los abre siempre con `documentId` fijo (igual al nombre del tipo). No hace falta (ni se puede, desde la UI) crear un segundo documento de estos tipos.
+- `testimonio` es la única colección normal; el orden de publicación lo decide Sanity (no hace falta campo de estado, a diferencia de lo que habría sido con Directus).
 
 Reglas que hay que respetar:
 
 1. **Todo se lee en el build** (en el frontmatter de Astro o en `lib/`), nunca desde el navegador. El sitio no tiene servidor ni secretos en el cliente. Contenido nuevo = reconstruir (cron semanal para el RSS, webhook de Sanity para lo demás).
 2. **Una fuente configurada que falla rompe el build a propósito** (`throw`). Así se mantiene la versión publicada en vez de publicar una web vacía. No lo cambies por un `catch` silencioso.
-   - Única excepción: el singleton `portada`. Si el documento no existe todavía, la query de Sanity devuelve `null` (no un error) y se usa `site.ts`, porque es opcional.
+   - Única excepción: los singletons de la portada (`portada`, `lema`, `domingo`, `jovenes`, `contacto`, `predicasEnlaces`, `versiculo`, `esencia`). Si el documento no existe todavía, la query de Sanity devuelve `null` (no un error) y se usa `site.ts`, porque son opcionales.
 3. **Sin configuración, datos de ejemplo** marcados con `esEjemplo: true`, y la UI lo indica con una etiqueta discreta. No quites esa etiqueta.
 4. Para una fuente nueva, sigue el mismo patrón:
    - Función `getX()` en `lib/` que devuelve `{ datos, esEjemplo }`.
@@ -214,6 +223,6 @@ Reglas que hay que respetar:
 - Trazo real de la ola (`Wave.astro` sigue con el trazo provisional).
 - Fotos y vídeo del hero.
 - Envío del formulario «Planifica tu visita» (`site.contacto.formAction`) y página de política de privacidad.
-- Contenido real de los documentos `testimonio` y `portada` en Sanity (el schema ya está en `studio/`), y el webhook de rebuild.
+- Contenido real de los documentos de Sanity (el schema y el webhook de rebuild ya están listos): `testimonio`, `portada`, `lema`, `domingo`, `jovenes`, `contacto`, `predicasEnlaces`, `versiculo`, `esencia`.
 - Decisión de la directiva sobre paleta y letra de lectura. Cuando se decida: `defaultPalette` y `showPaletteSwitcher: false` en `site.ts`.
 - Dominio definitivo en `astro.config.mjs`. 

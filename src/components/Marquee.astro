@@ -1,6 +1,6 @@
 ---
-import { site } from '../data/site';
-const items = site.lema.alternativos;
+import { getLema } from '../lib/lema';
+const { alternativos: items } = await getLema();
 ---
 
 <div

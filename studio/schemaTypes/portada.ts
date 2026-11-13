@@ -29,6 +29,29 @@ export default defineType({
       initialValue: true,
     }),
     defineField({
+      name: 'eyebrow',
+      title: 'Etiqueta sobre el titular',
+      type: 'string',
+    }),
+    defineField({
+      name: 'texto',
+      title: 'Texto bajo el titular',
+      type: 'text',
+      rows: 3,
+    }),
+    defineField({
+      name: 'botonPrincipalTexto',
+      title: 'Texto del botón principal',
+      description: 'Lleva a "Planifica tu visita".',
+      type: 'string',
+    }),
+    defineField({
+      name: 'botonSecundarioTexto',
+      title: 'Texto del botón secundario',
+      description: 'Lleva a "¿Primera vez?".',
+      type: 'string',
+    }),
+    defineField({
       name: 'promoActiva',
       title: '¿Mostrar tarjeta de promoción?',
       description: 'Si no está activa, el hero muestra la tarjeta por defecto "Este domingo".',

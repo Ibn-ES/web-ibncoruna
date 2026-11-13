@@ -9,9 +9,11 @@ import PlayButton from '../components/PlayButton.astro';
 import Testimonios from '../components/Testimonios.astro';
 import Wave from '../components/Wave.astro';
 import { getPredicas, formatFecha } from '../lib/predicas';
+import { getPredicasEnlaces } from '../lib/predicasEnlaces';
 import { site } from '../data/site';
 
 const { predicas, esEjemplo } = await getPredicas();
+const enlaces = await getPredicasEnlaces();
 ---
 
 <Layout
@@ -30,8 +32,8 @@ const { predicas, esEjemplo } = await getPredicas();
           sofá.
         </p>
         <div class="mt-9 flex flex-wrap gap-3">
-          <a href={site.predicas.spotifyUrl} class="btn btn--warm">Seguir en Spotify <span class="arrow" aria-hidden="true">↗</span></a>
-          {site.predicas.applePodcastsUrl && <a href={site.predicas.applePodcastsUrl} class="btn btn--ghost">Apple Podcasts ↗</a>}
+          <a href={enlaces.spotifyUrl} class="btn btn--warm">Seguir en Spotify <span class="arrow" aria-hidden="true">↗</span></a>
+          {enlaces.applePodcastsUrl && <a href={enlaces.applePodcastsUrl} class="btn btn--ghost">Apple Podcasts ↗</a>}
         </div>
       </div>
     </header>

@@ -1,6 +1,8 @@
 ---
 import Wave from './Wave.astro';
-import { site } from '../data/site';
+import { getEsencia } from '../lib/esencia';
+
+const esencia = await getEsencia();
 ---
 
 <section id="quienes" class="pb-[clamp(100px,12vw,160px)] pt-[clamp(80px,10vw,140px)]" aria-labelledby="esencia-title">
@@ -18,7 +20,7 @@ import { site } from '../data/site';
       </p>
 
       <ol class="m-0 grid list-none grid-cols-3 gap-4 p-0 max-[640px]:grid-cols-1" role="list">
-        {site.esencia.map((v, i) => (
+        {esencia.map((v, i) => (
           <li class="reveal flex min-h-[260px] flex-col gap-[10px] rounded-[var(--radius-l)] border border-line bg-surface p-[28px_26px_32px] max-[640px]:min-h-0">
             <span class="mb-auto font-display text-[0.875rem] font-bold tracking-[0.1em] text-accent" aria-hidden="true">0{i + 1}</span>
             <h3 class="mt-10 text-[clamp(1.75rem,2.6vw,2.25rem)] max-[640px]:mt-4">{v.titulo}</h3>

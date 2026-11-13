@@ -1,17 +1,30 @@
 import type { StructureResolver } from 'sanity/structure';
 
 /**
- * "portada" es un singleton: siempre se edita el mismo documento
- * (documentId fijo "portada"), sin lista ni opción de crear uno nuevo.
+ * Documentos singleton de la portada: siempre se edita el mismo documento
+ * (documentId fijo = su tipo), sin lista ni opción de crear uno nuevo.
  */
+const singletons = [
+  { type: 'portada', title: 'Portada (hero)' },
+  { type: 'lema', title: 'Lema' },
+  { type: 'domingo', title: 'Domingo' },
+  { type: 'jovenes', title: 'Jóvenes' },
+  { type: 'contacto', title: 'Contacto' },
+  { type: 'predicasEnlaces', title: 'Prédicas · enlaces' },
+  { type: 'versiculo', title: 'Versículo' },
+  { type: 'esencia', title: 'Quiénes somos' },
+];
+
 export const structure: StructureResolver = (S) =>
   S.list()
     .title('Contenido')
     .items([
-      S.listItem()
-        .title('Portada')
-        .id('portada')
-        .child(S.document().schemaType('portada').documentId('portada')),
+      ...singletons.map(({ type, title }) =>
+        S.listItem()
+          .title(title)
+          .id(type)
+          .child(S.document().schemaType(type).documentId(type)),
+      ),
       S.divider(),
-      ...S.documentTypeListItems().filter((item) => item.getId() !== 'portada'),
+      ...S.documentTypeListItems().filter((item) => !singletons.some((s) => s.type === item.getId())),
     ]);

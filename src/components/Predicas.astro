@@ -2,9 +2,10 @@
 import EpisodeCover from './EpisodeCover.astro';
 import PlayButton from './PlayButton.astro';
 import { getPredicas, formatFecha } from '../lib/predicas';
-import { site } from '../data/site';
+import { getPredicasEnlaces } from '../lib/predicasEnlaces';
 
 const { predicas, esEjemplo } = await getPredicas();
+const enlaces = await getPredicasEnlaces();
 const [ultima, ...resto] = predicas;
 const siguientes = resto.slice(0, 3);
 ---
@@ -19,9 +20,9 @@ const siguientes = resto.slice(0, 3);
       <div class="flex max-w-[28rem] flex-col gap-5">
         <p class="lead">La prédica de cada domingo, en Spotify. Para el coche, el paseo o el sofá.</p>
         <div class="flex flex-wrap gap-[10px]">
-          <a href={site.predicas.spotifyUrl} class="btn">Seguir en Spotify <span class="arrow" aria-hidden="true">↗</span></a>
-          {site.predicas.applePodcastsUrl && (
-            <a href={site.predicas.applePodcastsUrl} class="btn btn--ghost">Apple Podcasts ↗</a>
+          <a href={enlaces.spotifyUrl} class="btn">Seguir en Spotify <span class="arrow" aria-hidden="true">↗</span></a>
+          {enlaces.applePodcastsUrl && (
+            <a href={enlaces.applePodcastsUrl} class="btn btn--ghost">Apple Podcasts ↗</a>
           )}
         </div>
       </div>
