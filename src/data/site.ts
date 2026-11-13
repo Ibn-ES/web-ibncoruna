@@ -41,7 +41,9 @@ export const site = {
     fondo: {
       /** Foto de fondo (también hace de póster del vídeo). Vacío = ilustración del mar.
        * TODO: esta es una foto de muestra (banco de imágenes) solo para ver el resultado.
-       * Sustitúyela por una foto real de la iglesia antes de publicar. */
+       * Sustitúyela por una foto real de la iglesia antes de publicar. 
+       * imagen: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=2000&auto=format&fit=crop',
+       * */
       imagen: '',
       /** Vídeo corto en bucle, sin sonido (MP4, 8-12 s, ≤ 3 MB). Opcional. */
       video: '',
