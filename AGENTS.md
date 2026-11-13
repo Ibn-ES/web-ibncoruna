@@ -66,6 +66,8 @@ studio/                     Sanity Studio: app aparte, con su propio package.jso
 | Prédicas, enlaces (Spotify/Apple) | Sanity, singleton `predicasEnlaces` (`lib/predicasEnlaces.ts`) | `SANITY_PROJECT_ID` | `site.predicas` |
 | Versículo | Sanity, singleton `versiculo` (`lib/versiculo.ts`) | `SANITY_PROJECT_ID` | `site.versiculo` |
 | Quiénes somos (esencia) | Sanity, singleton `esencia` (`lib/esencia.ts`) | `SANITY_PROJECT_ID` | `site.esencia` |
+| Aviso legal (`/legal`) | Sanity, singleton `legal` (`lib/legal.ts`) | `SANITY_PROJECT_ID` | `site.legal` (con `[HUECOS]`) |
+| Política de privacidad (`/privacidad`) | Sanity, singleton `privacidad` (`lib/privacidad.ts`) | `SANITY_PROJECT_ID` | `site.privacidad` (con `[HUECOS]`) |
 
 El **nav** (`site.nav`) se queda fijo en código a propósito: son las anclas/rutas del propio sitio, no contenido editorial.
 
@@ -83,7 +85,7 @@ npm run deploy    # publica los cambios de schema en https://ibncoruna.sanity.st
 ```
 
 - Cada fichero de `schemaTypes/` define los mismos campos que lee su `lib/*.ts` correspondiente (mismo nombre: `domingo.ts` ↔ `domingo.ts`, etc.). Si cambias un campo en un lado, cámbialo en el otro.
-- `portada`, `lema`, `domingo`, `jovenes`, `contacto`, `predicasEnlaces`, `versiculo` y `esencia` son **singletons**: `structure.ts` los abre siempre con `documentId` fijo (igual al nombre del tipo). No hace falta (ni se puede, desde la UI) crear un segundo documento de estos tipos.
+- `portada`, `lema`, `domingo`, `jovenes`, `contacto`, `predicasEnlaces`, `versiculo`, `esencia`, `legal` y `privacidad` son **singletons**: `structure.ts` los abre siempre con `documentId` fijo (igual al nombre del tipo). No hace falta (ni se puede, desde la UI) crear un segundo documento de estos tipos.
 - `testimonio` es la única colección normal; el orden de publicación lo decide Sanity (no hace falta campo de estado, a diferencia de lo que habría sido con Directus).
 
 Reglas que hay que respetar:
@@ -234,7 +236,7 @@ El sitio es bilingüe: **español** es el idioma principal (rutas sin prefijo: `
 - Datos entre corchetes en `site.ts`.
 - Trazo real de la ola (`Wave.astro` sigue con el trazo provisional).
 - Fotos y vídeo del hero.
-- Envío del formulario «Planifica tu visita» (`site.contacto.formAction`). El aviso legal y la política de privacidad ya enlazan a la web principal (`site.legal`).
-- Contenido real de los documentos de Sanity (el schema y el webhook de rebuild ya están listos): `testimonio`, `portada`, `lema`, `domingo`, `jovenes`, `contacto`, `predicasEnlaces`, `versiculo`, `esencia`.
+- Envío del formulario «Planifica tu visita» (`site.contacto.formAction`). El aviso legal y la política de privacidad ya tienen página propia (`/legal`, `/privacidad`), editable desde Sanity.
+- Contenido real de los documentos de Sanity (el schema y el webhook de rebuild ya están listos): `testimonio`, `portada`, `lema`, `domingo`, `jovenes`, `contacto`, `predicasEnlaces`, `versiculo`, `esencia`, `legal`, `privacidad` (estos dos últimos tienen de momento texto de ejemplo con `[HUECOS]`, pendiente de que la iglesia dé el texto real: razón social, CIF, domicilio).
 - Decisión de la directiva sobre la letra de lectura (paleta ya decidida: Atlántico, `defaultPalette: 'a'`, selector apagado).
 - Dominio definitivo en `astro.config.mjs`. 

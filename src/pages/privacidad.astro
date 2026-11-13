@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import LegalContent from '../components/LegalContent.astro';
+import PaletteSwitcher from '../components/PaletteSwitcher.astro';
+import { getPrivacidad } from '../lib/privacidad';
+import { site } from '../data/site';
+import { useTranslations } from '../i18n/ui';
+
+const privacidad = await getPrivacidad(Astro.currentLocale);
+const t = useTranslations(Astro.currentLocale);
+---
+
+<Layout title={`${privacidad.titulo} · ${site.name}`} description={t('privacidad.metaDescription')}>
+  <Nav current="/privacidad" />
+  <main id="contenido" class="overflow-x-clip">
+    <LegalContent eyebrow={t('privacidad.eyebrow')} documento={privacidad} />
+  </main>
+  <Footer />
+  {site.showPaletteSwitcher && <PaletteSwitcher />}
+</Layout>

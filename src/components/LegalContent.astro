@@ -1,0 +1,29 @@
+---
+/**
+ * Cuerpo compartido de las páginas /legal y /privacidad: cabecera + secciones.
+ * Lo usan las dos páginas, en los dos idiomas, para no repetir el marcado.
+ */
+import type { Legal } from '../lib/legal';
+
+interface Props {
+  eyebrow: string;
+  documento: Legal;
+}
+const { eyebrow, documento } = Astro.props;
+---
+
+<header class="panel mt-[var(--inset)] bg-surface pb-[clamp(48px,6vw,80px)] pt-[160px]">
+  <div class="container">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1 class="display-l mt-5 max-w-[20ch]">{documento.titulo}</h1>
+  </div>
+</header>
+
+<section class="container flex max-w-[72ch] flex-col gap-10 py-[clamp(56px,8vw,96px)]">
+  {documento.secciones.map((s) => (
+    <div class="flex flex-col gap-2">
+      <h2 class="font-display text-[1.25rem] font-bold tracking-[-0.01em]">{s.titulo}</h2>
+      <p class="whitespace-pre-line text-base leading-[1.6] text-muted">{s.texto}</p>
+    </div>
+  ))}
+</section>

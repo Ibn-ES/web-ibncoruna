@@ -1,0 +1,26 @@
+---
+/**
+ * Versión en gallego de /legal. Igual que ../legal.astro: ver el
+ * comentario de gl/index.astro sobre por qué está duplicada.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import LegalContent from '../../components/LegalContent.astro';
+import PaletteSwitcher from '../../components/PaletteSwitcher.astro';
+import { getLegal } from '../../lib/legal';
+import { site } from '../../data/site';
+import { useTranslations } from '../../i18n/ui';
+
+const legal = await getLegal(Astro.currentLocale);
+const t = useTranslations(Astro.currentLocale);
+---
+
+<Layout title={`${legal.titulo} · ${site.name}`} description={t('legal.metaDescription')}>
+  <Nav current="/legal" />
+  <main id="contenido" class="overflow-x-clip">
+    <LegalContent eyebrow={t('legal.eyebrow')} documento={legal} />
+  </main>
+  <Footer />
+  {site.showPaletteSwitcher && <PaletteSwitcher />}
+</Layout>

@@ -13,6 +13,8 @@ const singletons = [
   { type: 'predicasEnlaces', title: 'Prédicas · enlaces' },
   { type: 'versiculo', title: 'Versículo' },
   { type: 'esencia', title: 'Quiénes somos' },
+  { type: 'legal', title: 'Aviso legal' },
+  { type: 'privacidad', title: 'Política de privacidad' },
 ];
 
 export const structure: StructureResolver = (S) =>

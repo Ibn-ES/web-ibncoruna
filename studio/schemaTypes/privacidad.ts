@@ -1,0 +1,43 @@
+import { defineField, defineType } from 'sanity';
+
+/**
+ * Singleton: política de privacidad. Los campos coinciden con los que lee
+ * src/lib/privacidad.ts en el sitio.
+ */
+export default defineType({
+  name: 'privacidad',
+  title: 'Política de privacidad',
+  type: 'document',
+  fields: [
+    defineField({ name: 'titulo', title: 'Título', type: 'string', initialValue: 'Política de privacidad' }),
+    defineField({ name: 'tituloGl', title: 'Título (gallego)', type: 'string' }),
+    defineField({
+      name: 'secciones',
+      title: 'Secciones',
+      description: 'Un apartado por bloque: "Responsable del tratamiento", "Finalidad", "Cookies"…',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'seccion',
+          fields: [
+            defineField({ name: 'titulo', title: 'Título', type: 'string', validation: (Rule) => Rule.required() }),
+            defineField({ name: 'texto', title: 'Texto', type: 'text', rows: 6, validation: (Rule) => Rule.required() }),
+            defineField({ name: 'tituloGl', title: 'Título (gallego)', type: 'string' }),
+            defineField({ name: 'textoGl', title: 'Texto (gallego)', type: 'text', rows: 6 }),
+          ],
+          preview: {
+            select: { title: 'titulo' },
+          },
+        },
+      ],
+    }),
+  ],
+  preview: {
+    select: { secciones: 'secciones' },
+    prepare: ({ secciones }) => ({
+      title: 'Política de privacidad',
+      subtitle: Array.isArray(secciones) ? `${secciones.length} secciones` : 'Sin secciones',
+    }),
+  },
+});
