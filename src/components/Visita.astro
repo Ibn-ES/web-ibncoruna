@@ -1,13 +1,13 @@
 ---
 import Icon from './Icon.astro';
-import { site } from '../data/site';
 import { getDomingo } from '../lib/domingo';
 import { getContacto } from '../lib/contacto';
-import { useTranslations } from '../i18n/ui';
+import { useTranslations, localizedHref } from '../i18n/ui';
 
 const domingo = await getDomingo(Astro.currentLocale);
 const contacto = await getContacto(Astro.currentLocale);
 const t = useTranslations(Astro.currentLocale);
+const href = (h: string) => localizedHref(Astro.currentLocale, h);
 
 const datos: { label: string; value: string; href?: string; icon?: 'instagram' | 'whatsapp' }[] = [
   { label: t('visita.labelDireccion'), value: domingo.direccionCompleta, href: domingo.mapaUrl },
@@ -88,7 +88,7 @@ const datos: { label: string; value: string; href?: string; icon?: 'instagram' |
 
       <label class="flex items-start gap-3 text-[0.9375rem] leading-[1.5]">
         <input class="mt-px h-[22px] w-[22px] flex-none" type="checkbox" name="privacidad" required />
-        <span>{t('visita.privacidadPre')} <a href={site.legal.privacidadUrl} target="_blank" rel="noopener">{t('visita.politicaPrivacidad')}</a></span>
+        <span>{t('visita.privacidadPre')} <a href={href('/privacidad')}>{t('visita.politicaPrivacidad')}</a></span>
       </label>
 
       <button type="submit" class="btn self-start min-h-[58px] px-[2em] max-[480px]:self-stretch">{t('visita.enviar')} <span class="arrow" aria-hidden="true">→</span></button>

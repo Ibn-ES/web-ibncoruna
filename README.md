@@ -23,7 +23,8 @@ Requiere Node ≥ 22.23 (lo pide Astro 7).
 | `src/layouts/Layout.astro` | `<head>`, SEO, carga de fuentes y elección de paleta. |
 | `src/pages/index.astro` | La portada: solo ordena las secciones. |
 | `src/pages/predicas.astro` | Página `/predicas` con todas las prédicas. |
-| `src/pages/gl/` | Las mismas páginas, en gallego (`/gl/`, `/gl/predicas`). |
+| `src/pages/legal.astro`, `privacidad.astro` | Aviso legal y política de privacidad (Sanity o `site.ts`). |
+| `src/pages/gl/` | Las mismas páginas, en gallego (`/gl/`, `/gl/predicas`, `/gl/legal`, `/gl/privacidad`). |
 | `src/i18n/ui.ts` | Textos fijos de la interfaz en español y gallego. |
 | `src/components/` | Una sección por fichero (`Hero`, `Semana`, `Esencia`, `PrimeraVez`, `Visita`…). |
 
@@ -82,10 +83,10 @@ El hero puede llevar **foto o vídeo de fondo** y una **tarjeta para anunciar** 
 
 ## Pendiente
 
-- [ ] Rellenar los `[HUECOS]` de `site.ts` (hora, dirección, duración, niños, WhatsApp, testimonio).
+- [ ] Rellenar los `[HUECOS]` de `site.ts` (hora, dirección, duración, niños, WhatsApp, testimonio, y los datos del aviso legal y la privacidad: razón social, CIF, domicilio, email).
 - [ ] Sustituir el trazo provisional de la ola (`Wave.astro`) por el trazo real de la firma.
 - [ ] Fotos reales: `<Photo src="…">`. Las de ciudad y mar, con `duotone`; las de personas, a color natural. Niños siempre sin caras.
-- [ ] Conectar el formulario "Planifica tu visita" (`site.contacto.formAction`). El aviso legal y la política de privacidad ya enlazan a la web principal (`site.legal`).
+- [ ] Conectar el formulario "Planifica tu visita" (`site.contacto.formAction`). El aviso legal y la política de privacidad ya tienen página propia (`/legal`, `/privacidad`), editable desde Sanity.
 - [ ] Si la directiva elige Merriweather o Nunito como letra de lectura: cambiar el import en `Layout.astro` y `--font-body` en `global.css`.
 - [ ] Poner el dominio definitivo en `astro.config.mjs`.
 - [ ] `SPOTIFY_RSS_URL` y los enlaces de Spotify / Apple Podcasts en `site.ts` (`predicas`).

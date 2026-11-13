@@ -1,13 +1,12 @@
 ---
 /**
  * Aviso de privacidad en la primera visita. Hoy el sitio no usa cookies de
- * rastreo ni analítica de terceros, pero se avisa igual y se enlaza a la
- * política de privacidad de la web principal (site.legal.privacidadUrl).
+ * rastreo ni analítica de terceros, pero se avisa igual y se enlaza a /privacidad.
  * Se recuerda en localStorage para no volver a salir en este navegador.
  */
-import { site } from '../data/site';
-import { useTranslations } from '../i18n/ui';
+import { useTranslations, localizedHref } from '../i18n/ui';
 const t = useTranslations(Astro.currentLocale);
+const href = (h: string) => localizedHref(Astro.currentLocale, h);
 ---
 
 <div
@@ -20,7 +19,7 @@ const t = useTranslations(Astro.currentLocale);
   <p class="m-0 flex-1 basis-[240px] text-[0.9375rem] leading-[1.5]">
     {t('privacidad.texto')}
     {' '}
-    <a class="font-semibold text-deep underline" href={site.legal.privacidadUrl} target="_blank" rel="noopener">{t('privacidad.masInfo')}</a>
+    <a class="font-semibold text-deep underline" href={href('/privacidad')}>{t('privacidad.masInfo')}</a>
   </p>
   <button type="button" id="aviso-privacidad-ok" class="btn min-h-11 shrink-0 px-6">{t('privacidad.entendido')}</button>
 </div>

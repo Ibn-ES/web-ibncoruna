@@ -51,6 +51,11 @@ const es: Diccionario = {
   'privacidad.texto': 'Usamos lo mínimo para que la web funcione: sin cookies de rastreo ni analítica de terceros.',
   'privacidad.masInfo': 'Más información',
   'privacidad.entendido': 'Entendido',
+  'privacidad.eyebrow': 'Privacidad',
+  'privacidad.metaDescription': 'Política de privacidad de Buenas Noticias A Coruña.',
+
+  'legal.eyebrow': 'Aviso legal',
+  'legal.metaDescription': 'Aviso legal de Buenas Noticias A Coruña.',
 
   'audioPlayer.reproductor': 'Reproductor de prédicas',
   'audioPlayer.pausarReanudar': 'Pausar o reanudar',
@@ -102,7 +107,7 @@ const es: Diccionario = {
   'primeraVez.q4': '¿Qué pasa en un domingo?',
   'primeraVez.q5': '¿Y si vengo con niños?',
   'primeraVez.q6': '¿Tengo que saber algo antes?',
-  'primeraVez.a6': 'No. Ven como eres y te esperamos',
+  'primeraVez.a6': 'No. Ven como eres, te esperamos',
 
   'visita.eyebrow': 'Planifica tu visita',
   'visita.titulo': 'Eres bienvenido.',
@@ -186,6 +191,11 @@ const gl: Diccionario = {
   'privacidad.texto': 'Usamos o mínimo para que a web funcione: sen cookies de rastrexo nin analítica de terceiros.',
   'privacidad.masInfo': 'Máis información',
   'privacidad.entendido': 'Entendido',
+  'privacidad.eyebrow': 'Privacidade',
+  'privacidad.metaDescription': 'Política de privacidade de Buenas Noticias A Coruña.',
+
+  'legal.eyebrow': 'Aviso legal',
+  'legal.metaDescription': 'Aviso legal de Buenas Noticias A Coruña.',
 
   'audioPlayer.reproductor': 'Reprodutor de predicacións',
   'audioPlayer.pausarReanudar': 'Pausar ou continuar',

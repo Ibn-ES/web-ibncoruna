@@ -91,10 +91,62 @@ export const site = {
     formAction: '#',
   },
 
-  /** Aviso legal y política de privacidad: de momento viven en la web principal. */
+  /** Aviso legal: editable desde Sanity (singleton "legal"). Esto es el respaldo. */
   legal: {
-    avisoUrl: 'https://ibnbuenasnoticias.com/legal',
-    privacidadUrl: 'https://ibnbuenasnoticias.com/privacidad',
+    titulo: 'Aviso legal',
+    secciones: [
+      {
+        titulo: '1. Datos identificativos',
+        texto:
+          'En cumplimiento del deber de información, se indican los datos identificativos del titular de este sitio web: [RAZÓN SOCIAL], con CIF [CIF], domicilio en [DIRECCIÓN], A Coruña, e email de contacto [EMAIL].',
+      },
+      {
+        titulo: '2. Objeto',
+        texto:
+          'Este sitio web tiene como finalidad informar sobre la actividad de Buenas Noticias A Coruña (IBN Coruña): horarios, actividades y forma de contacto.',
+      },
+      {
+        titulo: '3. Condiciones de uso',
+        texto:
+          'El acceso a este sitio web es gratuito y no requiere registro previo. El uso del sitio implica la aceptación de este aviso legal.',
+      },
+      {
+        titulo: '4. Propiedad intelectual',
+        texto:
+          'Los contenidos de este sitio (textos, imágenes, logotipos) son propiedad de [RAZÓN SOCIAL] o se usan con la autorización correspondiente, y no pueden reproducirse sin permiso.',
+      },
+    ],
+  },
+
+  /** Política de privacidad: editable desde Sanity (singleton "privacidad"). Esto es el respaldo. */
+  privacidad: {
+    titulo: 'Política de privacidad',
+    secciones: [
+      {
+        titulo: 'Responsable del tratamiento',
+        texto: '[RAZÓN SOCIAL], con CIF [CIF] y domicilio en [DIRECCIÓN], A Coruña. Contacto: [EMAIL].',
+      },
+      {
+        titulo: 'Finalidad del tratamiento',
+        texto:
+          'Los datos que nos facilitas a través del formulario "Planifica tu visita" se usan únicamente para organizar tu visita y contactar contigo si hace falta.',
+      },
+      {
+        titulo: 'Legitimación y conservación',
+        texto:
+          'La base legal es tu consentimiento al enviar el formulario. Conservamos los datos solo el tiempo necesario para ese fin, y no se ceden a terceros.',
+      },
+      {
+        titulo: 'Tus derechos',
+        texto:
+          'Puedes acceder, rectificar o suprimir tus datos, y ejercer los demás derechos que te reconoce el RGPD, escribiendo a [EMAIL].',
+      },
+      {
+        titulo: 'Cookies',
+        texto:
+          'Este sitio no usa cookies de rastreo ni analítica de terceros. Solo guarda en tu propio navegador (localStorage, nunca en nuestros servidores) si ya has visto este aviso de privacidad y, si lo cambias, tu paleta de color preferida.',
+      },
+    ],
   },
 
   predicas: {
