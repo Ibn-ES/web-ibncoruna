@@ -1,0 +1,119 @@
+---
+import Logo from './Logo.astro';
+import { site } from '../data/site';
+
+interface Props {
+  /** Ruta de la página actual, para marcar el enlace activo */
+  current?: string;
+}
+const { current = '/' } = Astro.props;
+---
+
+<header
+  class="pointer-events-none fixed inset-x-0 top-[calc(var(--inset)+10px)] z-50 flex justify-center px-[calc(var(--inset)+10px)]"
+>
+  <nav
+    class="pointer-events-auto flex w-full max-w-[1120px] items-center gap-5 rounded-full border border-line bg-[color-mix(in_srgb,#fff_86%,transparent)] py-2 pl-[22px] pr-2 text-deep shadow-[0_12px_40px_-18px_color-mix(in_srgb,var(--deep)_45%,transparent)] backdrop-blur-[18px] backdrop-saturate-[1.4]"
+    aria-label="Principal"
+  >
+    <a href="/" class="mr-auto no-underline" aria-label="Buenas Noticias A Coruña, inicio">
+      <Logo />
+    </a>
+
+    <ul class="m-0 flex list-none gap-1 p-0 max-[1160px]:hidden" role="list">
+      {site.nav.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            aria-current={item.href === current ? 'page' : undefined}
+            class="block rounded-full px-3 py-3 font-display text-[0.9375rem] font-semibold no-underline transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--deep)_8%,transparent)] aria-[current=page]:bg-deep aria-[current=page]:text-white"
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <a href="/#contacto" class="btn min-h-[46px] max-[1160px]:hidden">Planifica tu visita</a>
+
+    <!-- Menú móvil: Popover API nativa, sin librerías -->
+    <button
+      class="hidden min-h-[46px] cursor-pointer items-center gap-[10px] rounded-full border-0 bg-deep px-[18px] font-display text-[0.9375rem] font-bold text-white max-[1160px]:flex"
+      popovertarget="menu-movil"
+      aria-label="Abrir menú"
+    >
+      <span>Menú</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"></path></svg>
+    </button>
+  </nav>
+
+  <div id="menu-movil" popover class="sheet on-dark flex flex-col gap-6 rounded-xl bg-deep p-[22px_22px_28px] text-white">
+    <div class="flex items-center justify-between">
+      <Logo tone="white" />
+      <button
+        class="grid h-12 w-12 cursor-pointer place-items-center rounded-full border border-[color-mix(in_srgb,#fff_30%,transparent)] bg-transparent text-white"
+        popovertarget="menu-movil"
+        popovertargetaction="hide"
+        aria-label="Cerrar menú"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </button>
+    </div>
+    <ul class="m-0 mt-auto list-none p-0" role="list">
+      {site.nav.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            aria-current={item.href === current ? 'page' : undefined}
+            class="block py-[10px] font-display text-[clamp(2.25rem,10vw,3.25rem)] font-extrabold leading-[1.1] tracking-[-0.035em] no-underline"
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a href="/#contacto" class="btn btn--warm min-h-[60px] self-stretch">Planifica tu visita <span class="arrow" aria-hidden="true">→</span></a>
+  </div>
+</header>
+
+<script>
+  // Al tocar un enlace del menú móvil, se cierra el menú.
+  const sheet = document.getElementById('menu-movil');
+  sheet?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => sheet.hidePopover()));
+</script>
+
+<style>
+  /* Apertura/cierre del popover: pseudo-clase :popover-open y @starting-style
+     no tienen variante de utilidad en Tailwind, así que se quedan en CSS. */
+  .sheet {
+    position: fixed;
+    inset: var(--inset);
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+    transition:
+      opacity 0.3s var(--ease-out),
+      transform 0.4s var(--ease-out),
+      display 0.4s allow-discrete,
+      overlay 0.4s allow-discrete;
+  }
+  .sheet:popover-open {
+    display: flex;
+    opacity: 1;
+    transform: none;
+  }
+  @starting-style {
+    .sheet:popover-open {
+      opacity: 0;
+      transform: translateY(-12px) scale(0.98);
+    }
+  }
+  .sheet::backdrop {
+    background: color-mix(in srgb, var(--deep) 40%, transparent);
+  }
+</style>

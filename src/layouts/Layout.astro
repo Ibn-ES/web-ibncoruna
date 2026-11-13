@@ -1,0 +1,56 @@
+---
+import '@fontsource-variable/montserrat';
+import '@fontsource-variable/lora';
+import '@fontsource-variable/lora/wght-italic.css';
+import '../styles/global.css';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = `${site.name} · ${site.lema.principal} ${site.lema.secundario}`, description = site.description } =
+  Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="es" data-palette={site.defaultPalette}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0b2545" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+
+    <!--
+      Paleta: ?paleta=a|b|c en la URL la fija (y se recuerda en este navegador).
+      Va en línea y antes de pintar para que no haya parpadeo de colores.
+    -->
+    <script is:inline>
+      (() => {
+        try {
+          const valid = ['a', 'b', 'c'];
+          const fromUrl = new URLSearchParams(location.search).get('paleta');
+          if (valid.includes(fromUrl)) localStorage.setItem('bn-paleta', fromUrl);
+          const saved = localStorage.getItem('bn-paleta');
+          if (valid.includes(saved)) document.documentElement.dataset.palette = saved;
+        } catch {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="absolute left-4 top-[-60px] z-[200] rounded-xl bg-deep px-[18px] py-3 font-display font-bold text-white no-underline focus:top-4" href="#contenido">Saltar al contenido</a>
+    <slot />
+  </body>
+</html>

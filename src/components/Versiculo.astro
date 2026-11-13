@@ -1,0 +1,18 @@
+---
+import { site } from '../data/site';
+const v = site.versiculo;
+---
+
+<section class="panel on-dark bg-band py-[clamp(90px,11vw,150px)] text-white" aria-label="Versículo">
+  <svg class="absolute inset-0 z-[-1] h-full w-full" viewBox="0 0 1440 400" preserveAspectRatio="none" aria-hidden="true">
+    {[80, 140, 200, 260, 320].map((y) => (
+      <path class="fill-none stroke-white opacity-[0.14]" stroke-width="1.5" d={`M-40 ${y} C 200 ${y - 30}, 440 ${y - 30}, 680 ${y} S 1160 ${y + 30}, 1480 ${y}`} />
+    ))}
+  </svg>
+  <figure class="container reveal mx-auto max-w-[1040px] text-center">
+    <blockquote class="m-0">
+      <p class="text-[clamp(1.875rem,4vw,3.25rem)] italic leading-[1.3] tracking-[-0.01em] [text-wrap:balance]">“{v.texto}”</p>
+    </blockquote>
+    <figcaption class="mt-8 font-display text-[1.1875rem] font-bold uppercase tracking-[0.2em]">{v.cita}</figcaption>
+  </figure>
+</section>

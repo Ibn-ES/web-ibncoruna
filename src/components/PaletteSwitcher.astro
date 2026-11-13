@@ -1,0 +1,52 @@
+---
+/**
+ * Selector de paleta para enseñar las tres opciones a la directiva.
+ * Desactívalo con site.showPaletteSwitcher = false cuando esté decidida.
+ */
+import { palettes, site } from '../data/site';
+---
+
+<div
+  class="fixed right-[calc(var(--inset)+10px)] top-1/2 z-[60] flex -translate-y-1/2 flex-col items-center gap-1 rounded-full border border-black/[0.08] bg-[color-mix(in_srgb,#fff_82%,transparent)] p-[6px] font-display text-[#0b2545] shadow-[0_16px_40px_-16px_rgb(0_0_0_/_0.35)] backdrop-blur-[16px] max-[720px]:bottom-[calc(var(--inset)+10px)] max-[720px]:top-auto max-[720px]:flex-row max-[720px]:translate-y-0"
+  role="group"
+  aria-label="Probar paleta de color"
+>
+  <span class="px-0 pb-1 pt-[6px] text-[0.625rem] font-bold uppercase tracking-[0.14em] max-[720px]:hidden">Paleta</span>
+  {Object.entries(palettes).map(([key, p]) => (
+    <button
+      type="button"
+      class="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border-0 bg-transparent px-[10px] font-[inherit] text-[0.875rem] font-semibold text-inherit aria-pressed:bg-[#0b2545] aria-pressed:text-white"
+      data-palette-btn={key}
+      aria-pressed={key === site.defaultPalette ? 'true' : 'false'}
+      title={p.name}
+    >
+      <span class="inline-flex" data-palette={key} aria-hidden="true">
+        <i class="ml-0 h-4 w-4 rounded-full border-2 border-white bg-deep"></i>
+        <i class="ml-[-5px] h-4 w-4 rounded-full border-2 border-white bg-band"></i>
+        <i class="ml-[-5px] h-4 w-4 rounded-full border-2 border-white bg-warm"></i>
+      </span>
+      <span class="sr-only">{key.toUpperCase()} · {p.name}</span>
+    </button>
+  ))}
+</div>
+
+<script>
+  const root = document.documentElement;
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-palette-btn]');
+  const sync = () =>
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.paletteBtn === root.dataset.palette)));
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      const key = b.dataset.paletteBtn!;
+      root.dataset.palette = key;
+      try {
+        localStorage.setItem('bn-paleta', key);
+        const url = new URL(location.href);
+        url.searchParams.set('paleta', key);
+        history.replaceState(null, '', url);
+      } catch {}
+      sync();
+    }),
+  );
+  sync();
+</script>

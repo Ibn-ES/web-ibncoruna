@@ -1,0 +1,31 @@
+---
+import Logo from './Logo.astro';
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="on-dark bg-deep pb-8 pt-[clamp(64px,8vw,100px)] text-white">
+  <div class="container @container flex w-full flex-col">
+    <div class="flex flex-wrap justify-between gap-10">
+      <div>
+        <Logo size="l" tone="white" />
+        <p class="mt-5 max-w-[22rem] text-[color-mix(in_srgb,#fff_82%,var(--mist))]">{site.lema.principal} {site.lema.secundario}</p>
+      </div>
+      <nav aria-label="Pie de página" class="flex gap-[clamp(40px,8vw,120px)]">
+        <ul class="m-0 list-none p-0" role="list">
+          {site.nav.map((i) => <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={i.href}>{i.label}</a></li>)}
+        </ul>
+        <ul class="m-0 list-none p-0" role="list">
+          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${site.contacto.instagram}`}>@{site.contacto.instagram}</a></li>
+          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${site.jovenes.instagram}`}>@{site.jovenes.instagram}</a></li>
+          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={site.contacto.whatsappUrl}>WhatsApp</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="mt-16 flex flex-wrap justify-between gap-3 border-t border-[color-mix(in_srgb,#fff_20%,transparent)] pt-[22px] text-[0.9375rem] text-[color-mix(in_srgb,#fff_80%,var(--mist))]">
+      <span>© {year} {site.name} · {site.shortName}</span>
+      <a class="no-underline" href="#top">Volver arriba ↑</a>
+    </div>
+  </div>
+</footer>

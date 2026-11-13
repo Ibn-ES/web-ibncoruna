@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import AudioPlayer from '../components/AudioPlayer.astro';
+import PaletteSwitcher from '../components/PaletteSwitcher.astro';
+import EpisodeCover from '../components/EpisodeCover.astro';
+import PlayButton from '../components/PlayButton.astro';
+import Testimonios from '../components/Testimonios.astro';
+import Wave from '../components/Wave.astro';
+import { getPredicas, formatFecha } from '../lib/predicas';
+import { site } from '../data/site';
+
+const { predicas, esEjemplo } = await getPredicas();
+---
+
+<Layout
+  title={`Prédicas · ${site.name}`}
+  description="Las prédicas de cada domingo de Buenas Noticias A Coruña. Escúchalas aquí o en Spotify."
+>
+  <Nav current="/predicas" />
+  <main id="contenido" class="overflow-x-clip">
+    <header class="panel on-dark mt-[var(--inset)] bg-deep pb-[clamp(64px,8vw,110px)] pt-[160px] text-white">
+      <div class="container">
+        <p class="eyebrow">Prédicas</p>
+        <h1 class="display-xl mt-5 max-w-[12ch] text-[clamp(3rem,8vw,7.5rem)]">Escucha cuando quieras.</h1>
+        <Wave width={260} strokeWidth={6} draw={false} class="mt-5" />
+        <p class="lead mt-7 max-w-[36rem] text-[color-mix(in_srgb,#fff_84%,var(--mist))]">
+          La prédica de cada domingo, con palabras de todos los días. Aquí o en Spotify, para el coche, el paseo o el
+          sofá.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <a href={site.predicas.spotifyUrl} class="btn btn--warm">Seguir en Spotify <span class="arrow" aria-hidden="true">↗</span></a>
+          {site.predicas.applePodcastsUrl && <a href={site.predicas.applePodcastsUrl} class="btn btn--ghost">Apple Podcasts ↗</a>}
+        </div>
+      </div>
+    </header>
+
+    <section class="container pb-0 pt-[clamp(64px,8vw,110px)]" aria-label="Todas las prédicas">
+      {esEjemplo && <p class="mb-6 inline-block rounded-full border border-dashed border-line-strong px-3 py-[6px] font-display text-xs font-semibold text-muted">Datos de ejemplo · configura SPOTIFY_RSS_URL</p>}
+      <ol class="m-0 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] list-none gap-x-6 gap-y-10 p-0" role="list">
+        {
+          predicas.map((p) => (
+            <li class="reveal flex flex-col gap-4">
+              <EpisodeCover imagen={p.imagen} fecha={p.fecha} size="l" />
+              <div class="flex flex-col gap-2">
+                <p class="font-display text-[0.8125rem] font-semibold text-accent">
+                  {formatFecha(p.fecha)}
+                  {p.duracion && <> · {p.duracion}</>}
+                </p>
+                <h2 class="text-[1.375rem] leading-[1.15] tracking-[-0.02em]">{p.titulo}</h2>
+                <p class="line-clamp-3 text-base text-muted">{p.descripcion}</p>
+              </div>
+              <div class="mt-auto flex items-center gap-4">
+                <PlayButton predica={p} />
+                {p.enlace && <a href={p.enlace} class="py-3 font-display text-[0.9375rem] font-bold text-accent no-underline">Spotify ↗</a>}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <Testimonios />
+  </main>
+  <Footer />
+  <AudioPlayer />
+  {site.showPaletteSwitcher && <PaletteSwitcher />}
+</Layout>

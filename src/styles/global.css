@@ -1,0 +1,296 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------
+   Tokens de marca
+   Las tres paletas de la propuesta. Se elige con data-palette en <html>.
+   Nombres neutros para que el CSS no dependa de la paleta elegida:
+     --sand   tono cálido de la marca (Arena / Piedra), solo para detalles
+     --mist   fondo secundario (Bruma / Cielo / Espuma)
+     --band   azul protagonista (Principal / Principal / Mar)
+     --deep   azul profundo, texto y fondos oscuros
+     --warm   acento cálido (Faro / Atardecer / Faro)
+     --btn    fondo de botones con texto blanco (siempre ≥ 4.5:1)
+     --accent texto de acento sobre fondo claro (siempre ≥ 4.5:1)
+   ------------------------------------------------------------------ */
+:root,
+[data-palette='a'] {
+  --sand: #f3ebdd;
+  --mist: #d6e6f5;
+  --band: #005eb8;
+  --deep: #0b2545;
+  --warm: #f2b441;
+  --btn: #005eb8;
+  --accent: #005eb8;
+}
+[data-palette='b'] {
+  --sand: #f3ebdd;
+  --mist: #e0f3fa;
+  --band: #0099cc;
+  --deep: #0a3a5c;
+  --warm: #ee8e5a;
+  /* El blanco sobre #0099CC da 3,3:1: los botones van en el profundo. */
+  --btn: #0a3a5c;
+  --accent: #0a3a5c;
+}
+[data-palette='c'] {
+  --sand: #efe8dc;
+  --mist: #dce8f2;
+  --band: #3c7db5;
+  --deep: #0e2f4f;
+  --warm: #e9a15b;
+  --btn: #0e2f4f;
+  --accent: #0e2f4f;
+}
+
+:root {
+  /* Base blanca: el fondo es blanco y las superficies, un velo muy suave de la bruma. */
+  --bg: #ffffff;
+  --surface: color-mix(in srgb, var(--mist) 34%, #fff);
+  --surface-strong: color-mix(in srgb, var(--mist) 70%, #fff);
+  --line: color-mix(in srgb, var(--deep) 10%, transparent);
+  --line-strong: color-mix(in srgb, var(--deep) 18%, transparent);
+  --muted: color-mix(in srgb, var(--deep) 72%, #fff);
+
+  --font-display: 'Montserrat Variable', 'Montserrat', system-ui, sans-serif;
+  --font-body: 'Lora Variable', 'Lora', Georgia, serif;
+
+  --radius-xl: clamp(24px, 3vw, 40px);
+  --radius-l: 28px;
+  --radius-m: 18px;
+  --inset: clamp(8px, 1vw, 14px); /* margen de los paneles redondeados */
+  --gutter: clamp(20px, 4vw, 48px);
+  --max: 1240px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: light;
+  accent-color: var(--btn);
+}
+
+/* ------------------------------------------------------------------
+   Tokens de marca expuestos como utilidades de Tailwind.
+   Referencian las custom properties de arriba, así que `bg-deep`,
+   `text-warm`, etc. siguen el cambio de paleta en vivo.
+   ------------------------------------------------------------------ */
+@theme inline {
+  --color-sand: var(--sand);
+  --color-mist: var(--mist);
+  --color-band: var(--band);
+  --color-deep: var(--deep);
+  --color-warm: var(--warm);
+  --color-btn: var(--btn);
+  --color-accent: var(--accent);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-muted: var(--muted);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+
+  /* --radius-l se deja fuera a propósito: "l" choca con la utilidad
+     direccional rounded-l (lado izquierdo) de Tailwind. Se usa como
+     rounded-[var(--radius-l)] donde haga falta. */
+  --radius-xl: var(--radius-xl);
+  --radius-m: var(--radius-m);
+
+  --ease-out: var(--ease-out);
+}
+
+/* ------------------------------------------------------------------
+   Base
+   Dentro de @layer base: así las utilidades de Tailwind (capa
+   "utilities") siempre pueden ganarle a estas reglas, sin importar
+   especificidad. Sin capa, una regla como `img, svg { display: block }`
+   ganaría siempre a `.hidden`, sea cual sea su especificidad.
+   ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--deep);
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    transition: background-color 0.4s var(--ease-out);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Más específica que `img, svg` de arriba: así el atributo nativo
+     [hidden] (p. ej. la portada del reproductor) sigue ocultando el
+     elemento aunque sea una imagen o un svg. */
+  [hidden] {
+    display: none;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--warm);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: var(--warm);
+    color: var(--deep);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Componentes compartidos entre varias secciones.
+   Se quedan aquí (en vez de repetir la misma lista de utilidades en
+   cada .astro) porque @apply es el propio mecanismo de Tailwind para
+   esto: patrones reutilizados muchas veces en todo el sitio.
+   ------------------------------------------------------------------ */
+@layer components {
+  .container {
+    @apply mx-auto w-full;
+    max-width: var(--max);
+    padding-inline: var(--gutter);
+  }
+
+  /* Panel redondeado que deja ver un poco de fondo alrededor. */
+  .panel {
+    @apply relative isolate overflow-hidden;
+    margin-inline: var(--inset);
+    border-radius: var(--radius-xl);
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center font-display font-bold text-[0.8125rem] uppercase text-accent;
+    gap: 0.6em;
+    letter-spacing: 0.18em;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 1.6em;
+    height: 2px;
+    background: currentColor;
+    border-radius: 2px;
+  }
+  .on-dark .eyebrow {
+    @apply text-warm;
+  }
+
+  .display-xl {
+    font-size: clamp(3.25rem, 9.5vw, 9rem);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+  }
+  .display-l {
+    font-size: clamp(2.25rem, 5.4vw, 4.75rem);
+  }
+  .display-m {
+    font-size: clamp(1.75rem, 3.2vw, 2.75rem);
+  }
+  .lead {
+    line-height: 1.6;
+    font-size: clamp(1.1875rem, 1.6vw, 1.375rem);
+  }
+
+  /* Botones */
+  .btn {
+    --_bg: var(--btn);
+    --_fg: #fff;
+    @apply inline-flex min-h-[52px] cursor-pointer items-center justify-center rounded-full border-2 border-transparent px-[1.6em] font-display text-base font-bold no-underline;
+    gap: 0.6em;
+    background: var(--_bg);
+    color: var(--_fg);
+    letter-spacing: -0.005em;
+    transition:
+      transform 0.35s var(--ease-out),
+      background-color 0.25s,
+      color 0.25s,
+      box-shadow 0.35s var(--ease-out);
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--deep) 60%, transparent);
+  }
+  .btn .arrow {
+    transition: transform 0.35s var(--ease-out);
+  }
+  .btn:hover .arrow {
+    transform: translateX(4px);
+  }
+  .btn--warm {
+    --_bg: var(--warm);
+    --_fg: var(--deep);
+  }
+  .btn--ghost {
+    --_bg: transparent;
+    --_fg: var(--deep);
+    border-color: currentColor;
+  }
+  .on-dark .btn--ghost {
+    --_fg: #fff;
+  }
+  .btn--light {
+    --_bg: #fff;
+    --_fg: var(--deep);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Aparición al hacer scroll (solo CSS, sin JavaScript).
+   Donde el navegador no lo soporta, el contenido simplemente se ve.
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal both var(--ease-out);
+      animation-timeline: view();
+      animation-range: entry 5% cover 28%;
+    }
+  }
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(48px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

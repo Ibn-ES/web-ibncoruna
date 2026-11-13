@@ -1,0 +1,55 @@
+---
+/**
+ * La "ola": el trazo final de la firma ibn convertido en línea.
+ * Se usa para subrayar, separar o acompañar; nunca en lugar del logo.
+ * TODO: sustituir el path por el trazo real extraído del logo.
+ */
+interface Props {
+  width?: number;
+  strokeWidth?: number;
+  class?: string;
+  draw?: boolean; // se dibuja al entrar en pantalla
+  /** Grosor fijo en px aunque la ola se estire (para subrayar palabras) */
+  stretch?: boolean;
+}
+const { width = 320, strokeWidth = 5, class: className = '', draw = true, stretch = false } = Astro.props;
+---
+
+<svg
+  class:list={['h-auto overflow-visible text-warm', className, { 'wave--draw': draw }]}
+  width={width}
+  viewBox="0 0 320 24"
+  preserveAspectRatio={stretch ? 'none' : undefined}
+  aria-hidden="true"
+  focusable="false"
+>
+  <path
+    d="M3 14 C 33 2, 63 2, 93 13 S 153 25, 183 13 S 243 2, 273 13 S 310 21, 317 11"
+    fill="none"
+    stroke="currentColor"
+    stroke-width={strokeWidth}
+    stroke-linecap="round"
+    pathLength="1"
+    vector-effect={stretch ? 'non-scaling-stroke' : undefined}></path>
+</svg>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .wave--draw path {
+        stroke-dasharray: 1;
+        animation: draw both cubic-bezier(0.65, 0, 0.35, 1);
+        animation-timeline: view();
+        animation-range: entry 20% cover 40%;
+      }
+    }
+  }
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>

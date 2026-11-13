@@ -1,0 +1,32 @@
+---
+import { site } from '../data/site';
+const items = site.lema.alternativos;
+---
+
+<div
+  class="group relative z-[2] mx-[calc(var(--inset)*-1)] mt-[-44px] overflow-hidden rotate-[-2deg] bg-warm py-[22px] text-deep shadow-[0_20px_40px_-24px_color-mix(in_srgb,var(--deep)_60%,transparent)]"
+  role="region"
+  aria-label="Lemas"
+>
+  <ul class="sr-only">{items.map((t) => <li>{t}</li>)}</ul>
+  <div class="flex w-max motion-safe:animate-[scroll_38s_linear_infinite] motion-safe:group-hover:[animation-play-state:paused]" aria-hidden="true">
+    {[0, 1].map(() => (
+      <div class="flex items-center gap-8 whitespace-nowrap pr-8 font-display text-[clamp(1.5rem,3vw,2.5rem)] font-extrabold tracking-[-0.03em]">
+        {[...items, ...items].map((t) => (
+          <>
+            <span>{t}</span>
+            <svg class="flex-none" viewBox="0 0 64 24" width="52" height="20"><path d="M3 14 C 11 4, 19 4, 27 12 S 43 22, 51 12 S 59 6, 61 8" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" /></svg>
+          </>
+        ))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  @keyframes scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+</style>

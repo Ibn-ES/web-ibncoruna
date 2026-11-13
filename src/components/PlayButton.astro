@@ -1,0 +1,51 @@
+---
+/**
+ * Botón de reproducir una prédica.
+ * - Con audio en el RSS: reproduce en el reproductor de la web (AudioPlayer).
+ * - Sin audio: enlaza al episodio en Spotify.
+ */
+import type { Predica } from '../lib/predicas';
+import { formatFecha } from '../lib/predicas';
+import { site } from '../data/site';
+
+interface Props {
+  predica: Predica;
+  size?: 's' | 'l';
+  tone?: 'brand' | 'warm' | 'light';
+}
+const { predica, size = 's', tone = 'brand' } = Astro.props;
+const meta = [formatFecha(predica.fecha), predica.duracion].filter(Boolean).join(' · ');
+const href = predica.enlace ?? site.predicas.spotifyUrl;
+
+const sizeClass = size === 'l' ? 'h-18 w-18' : 'h-12 w-12';
+const toneClass = { brand: 'bg-btn text-white', warm: 'bg-warm text-deep', light: 'bg-white text-deep' }[tone];
+const playClass = [
+  'group relative grid flex-none place-items-center rounded-full border-0 cursor-pointer transition-[transform,box-shadow] duration-[0.35s] ease-out hover:scale-[1.06] hover:shadow-[0_10px_24px_-10px_color-mix(in_srgb,var(--deep)_70%,transparent)]',
+  sizeClass,
+  toneClass,
+].join(' ');
+---
+
+{
+  predica.audioUrl ? (
+    <button
+      type="button"
+      class={playClass}
+      data-play
+      data-id={predica.id}
+      data-src={predica.audioUrl}
+      data-title={predica.titulo}
+      data-meta={meta}
+      data-cover={predica.imagen}
+      aria-pressed="false"
+      aria-label={`Escuchar: ${predica.titulo}`}
+    >
+      <svg class="h-[44%] w-[44%] translate-x-[6%] fill-current group-aria-pressed:hidden" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" /></svg>
+      <svg class="hidden h-[44%] w-[44%] fill-current group-aria-pressed:block" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.2" height="14" rx="1.2" /><rect x="13.8" y="5" width="4.2" height="14" rx="1.2" /></svg>
+    </button>
+  ) : (
+    <a class={playClass} href={href} aria-label={`Escuchar en Spotify: ${predica.titulo}`}>
+      <svg class="h-[44%] w-[44%] translate-x-[6%] fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" /></svg>
+    </a>
+  )
+}

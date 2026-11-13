@@ -1,0 +1,131 @@
+---
+/**
+ * Reproductor flotante. Un único <audio> para toda la página: cualquier botón
+ * con [data-play] (ver PlayButton.astro) lo usa. Así solo suena una prédica a la vez
+ * y el reproductor sigue visible mientras se navega por la página.
+ */
+---
+
+<div
+  class="on-dark fixed bottom-[calc(var(--inset)+12px)] left-1/2 z-[70] grid w-[min(760px,calc(100%-2*var(--inset)-24px))] -translate-x-1/2 grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-x-[14px] gap-y-[10px] rounded-[22px] bg-[color-mix(in_srgb,var(--deep)_92%,transparent)] p-[12px_14px_12px_12px] text-white shadow-[0_24px_60px_-20px_rgb(0_0_0_/_0.5)] backdrop-blur-[16px] motion-safe:animate-[up_0.5s_var(--ease-out)] [&[hidden]]:hidden"
+  data-player
+  hidden
+  role="region"
+  aria-label="Reproductor de prédicas"
+>
+  <img class="col-start-1 row-start-1 h-12 w-12 rounded-[10px] object-cover" data-player-cover alt="" hidden />
+  <div class="col-start-2 row-start-1 flex min-w-0 flex-col">
+    <strong class="overflow-hidden text-ellipsis whitespace-nowrap font-display text-[0.9375rem] font-bold" data-player-title></strong>
+    <span class="text-[0.8125rem] text-[color-mix(in_srgb,#fff_78%,var(--mist))]" data-player-meta></span>
+  </div>
+  <button
+    type="button"
+    class="group col-start-3 row-start-1 grid h-11 w-11 cursor-pointer place-items-center rounded-full border-0 bg-warm text-deep"
+    data-player-toggle
+    aria-pressed="false"
+    aria-label="Pausar o reanudar"
+  >
+    <svg class="h-5 w-5 fill-current group-aria-pressed:hidden" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"></path></svg>
+    <svg class="hidden h-5 w-5 fill-current group-aria-pressed:block" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.2" height="14" rx="1.2"></rect><rect x="13.8" y="5" width="4.2" height="14" rx="1.2"></rect></svg>
+  </button>
+  <div class="col-span-full row-start-2 flex items-center gap-[10px] text-xs text-[color-mix(in_srgb,#fff_78%,var(--mist))] [font-variant-numeric:tabular-nums]">
+    <span data-player-time>0:00</span>
+    <input class="flex-1 accent-warm" type="range" min="0" max="100" step="0.1" value="0" data-player-seek aria-label="Posición" />
+    <span data-player-duration>0:00</span>
+  </div>
+  <button type="button" class="col-start-4 row-start-1 grid h-11 w-11 cursor-pointer place-items-center rounded-full border-0 bg-transparent text-white" data-player-close aria-label="Cerrar reproductor">
+    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+  </button>
+</div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-player]')!;
+  const q = <T extends Element>(sel: string) => bar.querySelector<T>(sel)!;
+  const titleEl = q<HTMLElement>('[data-player-title]');
+  const metaEl = q<HTMLElement>('[data-player-meta]');
+  const coverEl = q<HTMLImageElement>('[data-player-cover]');
+  const toggle = q<HTMLButtonElement>('[data-player-toggle]');
+  const seek = q<HTMLInputElement>('[data-player-seek]');
+  const timeEl = q<HTMLElement>('[data-player-time]');
+  const durEl = q<HTMLElement>('[data-player-duration]');
+
+  const audio = new Audio();
+  audio.preload = 'none';
+  let current: string | null = null;
+
+  const fmt = (s: number) => {
+    if (!Number.isFinite(s)) return '0:00';
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = String(Math.floor(s % 60)).padStart(2, '0');
+    return h ? `${h}:${String(m).padStart(2, '0')}:${sec}` : `${m}:${sec}`;
+  };
+
+  // Refleja el estado (sonando / en pausa) en todos los botones de la página
+  const sync = () => {
+    const playing = !audio.paused;
+    toggle.setAttribute('aria-pressed', String(playing));
+    document.querySelectorAll<HTMLElement>('[data-play]').forEach((b) => {
+      b.setAttribute('aria-pressed', String(playing && b.dataset.id === current));
+    });
+  };
+
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as Element).closest<HTMLElement>('[data-play]');
+    if (!btn) return;
+    const { id, src, title = '', meta = '', cover } = btn.dataset;
+    if (!src || !id) return;
+
+    if (id === current) {
+      audio.paused ? audio.play() : audio.pause();
+      return;
+    }
+    current = id;
+    audio.src = src;
+    titleEl.textContent = title;
+    metaEl.textContent = meta;
+    coverEl.hidden = !cover;
+    if (cover) coverEl.src = cover;
+    bar.hidden = false;
+    audio.play();
+
+    // Controles en la pantalla de bloqueo del móvil
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title,
+        artist: 'Buenas Noticias A Coruña',
+        artwork: cover ? [{ src: cover, sizes: '512x512' }] : [],
+      });
+    }
+  });
+
+  toggle.addEventListener('click', () => (audio.paused ? audio.play() : audio.pause()));
+  q('[data-player-close]').addEventListener('click', () => {
+    audio.pause();
+    bar.hidden = true;
+  });
+
+  // Solo suena una cosa a la vez: si se reproduce un audio, se pausan los vídeos de testimonios
+  audio.addEventListener('play', () => document.querySelectorAll<HTMLVideoElement>('video').forEach((v) => v.pause()));
+  document.addEventListener('bn:pausar-audio', () => audio.pause());
+
+  audio.addEventListener('play', sync);
+  audio.addEventListener('pause', sync);
+  audio.addEventListener('loadedmetadata', () => (durEl.textContent = fmt(audio.duration)));
+  audio.addEventListener('timeupdate', () => {
+    timeEl.textContent = fmt(audio.currentTime);
+    if (audio.duration) seek.value = String((audio.currentTime / audio.duration) * 100);
+  });
+  seek.addEventListener('input', () => {
+    if (audio.duration) audio.currentTime = (Number(seek.value) / 100) * audio.duration;
+  });
+</script>
+
+<style>
+  @keyframes up {
+    from {
+      opacity: 0;
+      translate: -50% 24px;
+    }
+  }
+</style>

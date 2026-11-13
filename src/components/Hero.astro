@@ -1,0 +1,152 @@
+---
+import SeaScene from './SeaScene.astro';
+import Wave from './Wave.astro';
+import { site } from '../data/site';
+import { getPortada } from '../lib/portada';
+
+const { fondo, promo } = await getPortada();
+const conFondo = Boolean(fondo.imagen || fondo.video);
+---
+
+<section
+  id="inicio"
+  class="on-dark relative isolate flex min-h-[100svh] flex-col justify-center bg-deep pb-[150px] pt-32 text-white max-[720px]:justify-start max-[720px]:pb-10 max-[720px]:pt-[120px]"
+  aria-labelledby="hero-title"
+>
+  {
+    conFondo ? (
+      <div class:list={['hero__media absolute inset-0 z-[-1] bg-deep', { 'bg-band': fondo.dosTonos }]} aria-hidden="true">
+        {fondo.imagen && <img class="absolute inset-0 h-full w-full object-cover" src={fondo.imagen} alt="" fetchpriority="high" decoding="async" />}
+        {fondo.video && (
+          // Sin autoplay en el HTML: el script decide si reproducirlo (movimiento reducido, ahorro de datos)
+          <video
+            class:list={[
+              'absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-[1.2s] ease-out [&.is-playing]:opacity-100',
+              { 'grayscale contrast-[115%] brightness-[1.05] mix-blend-multiply': fondo.dosTonos },
+            ]}
+            data-hero-video
+            muted
+            loop
+            playsinline
+            preload="none"
+            poster={fondo.imagen}
+          >
+            <source src={fondo.video} type="video/mp4" />
+          </video>
+        )}
+      </div>
+    ) : (
+      <SeaScene />
+    )
+  }
+
+  <div class="container relative">
+    <p class="eyebrow">Iglesia en A Coruña · fe, no religión</p>
+
+    <h1 id="hero-title" class="display-xl mt-5 max-w-[11ch] text-[clamp(3.25rem,9vw,8.25rem)]">
+      {site.lema.principal}
+    </h1>
+
+    <p class="mt-[18px] inline-flex flex-col gap-[6px] font-display text-[clamp(1.5rem,3vw,2.5rem)] font-semibold leading-[1.15] tracking-[-0.02em]">
+      <span>{site.lema.secundario}</span>
+      <Wave width={300} strokeWidth={6} draw={false} class="w-[min(300px,70vw)]" />
+    </p>
+
+    <p class="lead mt-7 max-w-[36rem] text-[color-mix(in_srgb,#fff_84%,var(--mist))]">
+      Una iglesia con Cristo en el centro, de tú a tú. Da igual si llevas toda la vida en la fe o si nunca has pisado
+      una iglesia: ven como eres, te guardamos sitio.
+    </p>
+
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href="#contacto" class="btn btn--warm">Planifica tu visita <span class="arrow" aria-hidden="true">→</span></a>
+      <a href="#visitanos" class="btn btn--ghost">¿Primera vez?</a>
+    </div>
+  </div>
+
+  {
+    promo ? (
+      <aside
+        class="hero__card absolute bottom-[clamp(16px,4vw,48px)] right-[clamp(16px,4vw,56px)] flex max-w-[340px] flex-col gap-[6px] rounded-[22px] border border-[color-mix(in_srgb,#fff_18%,transparent)] bg-[color-mix(in_srgb,var(--deep)_55%,transparent)] p-[20px_24px] backdrop-blur-[14px] max-[720px]:static max-[720px]:mx-[var(--gutter)] max-[720px]:mt-12 max-[720px]:max-w-none"
+        aria-label={promo.etiqueta || 'Anuncio'}
+      >
+        {promo.etiqueta && (
+          <span class="inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.18em] text-warm">
+            <span class="dot h-2 w-2 rounded-full bg-warm" aria-hidden="true" />
+            {promo.etiqueta}
+          </span>
+        )}
+        <strong class="font-display text-2xl font-extrabold leading-[1.15] tracking-[-0.02em]">{promo.titulo}</strong>
+        {promo.texto && <span class="text-base text-[color-mix(in_srgb,#fff_82%,var(--mist))]">{promo.texto}</span>}
+        {promo.enlace && (
+          <a href={promo.enlace} class="group mt-[6px] inline-flex min-h-11 items-center gap-2 font-display font-bold text-warm no-underline">
+            {promo.enlaceTexto ?? 'Más información'}{' '}
+            <span class="arrow inline-block transition-transform duration-[0.35s] ease-out group-hover:translate-x-1" aria-hidden="true">→</span>
+          </a>
+        )}
+      </aside>
+    ) : (
+      <aside
+        class="hero__card absolute bottom-[clamp(16px,4vw,48px)] right-[clamp(16px,4vw,56px)] flex max-w-[300px] flex-col gap-[6px] rounded-[22px] border border-[color-mix(in_srgb,#fff_18%,transparent)] bg-[color-mix(in_srgb,var(--deep)_55%,transparent)] p-[20px_24px] backdrop-blur-[14px] max-[720px]:static max-[720px]:mx-[var(--gutter)] max-[720px]:mt-12 max-[720px]:max-w-none"
+        aria-label="Este domingo"
+      >
+        <span class="inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.18em] text-warm">
+          <span class="dot h-2 w-2 rounded-full bg-warm" aria-hidden="true" />
+          Este domingo
+        </span>
+        <strong class="font-display text-2xl font-extrabold leading-[1.15] tracking-[-0.02em]">Te guardamos sitio.</strong>
+        <span class="text-base text-[color-mix(in_srgb,#fff_82%,var(--mist))]">
+          {site.domingo.hora} · {site.domingo.direccion}
+        </span>
+      </aside>
+    )
+  }
+</section>
+
+<script>
+  // Vídeo de fondo: solo si la persona no pidió reducir movimiento ni ahorrar datos.
+  const video = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+  if (video) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+    if (!reduce && !saveData) {
+      video.preload = 'auto';
+      video.addEventListener('playing', () => video.classList.add('is-playing'), { once: true });
+      video.play().catch(() => {});
+      // Pausa el vídeo cuando el hero no se ve (ahorra batería)
+      new IntersectionObserver(([e]) => (e.isIntersecting ? video.play().catch(() => {}) : video.pause())).observe(video);
+    }
+  }
+</script>
+
+<style>
+  /* Velo para que el texto blanco siempre se lea (más denso a la izquierda, donde va el texto).
+     Degradado de dos capas: no cabe razonablemente en una utilidad arbitraria. */
+  .hero__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--deep) 88%, transparent) 0%, color-mix(in srgb, var(--deep) 55%, transparent) 55%, color-mix(in srgb, var(--deep) 20%, transparent) 100%),
+      linear-gradient(0deg, color-mix(in srgb, var(--deep) 70%, transparent) 0%, transparent 40%);
+  }
+  @media (max-width: 720px) {
+    .hero__media::after {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--deep) 55%, transparent), color-mix(in srgb, var(--deep) 88%, transparent) 60%);
+    }
+  }
+
+  /* Pulso del punto "este domingo": anillo por box-shadow, no es el animate-ping de Tailwind. */
+  @media (prefers-reduced-motion: no-preference) {
+    .dot {
+      animation: ping 2.4s var(--ease-out) infinite;
+    }
+  }
+  @keyframes ping {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--warm) 70%, transparent);
+    }
+    100% {
+      box-shadow: 0 0 0 12px transparent;
+    }
+  }
+</style>

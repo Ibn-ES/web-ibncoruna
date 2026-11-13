@@ -1,0 +1,37 @@
+---
+/**
+ * Portada de un episodio. Si el RSS trae imagen, se usa; si no, se genera
+ * una con los colores de la paleta (fecha grande + la ola).
+ */
+interface Props {
+  imagen?: string;
+  fecha: Date;
+  class?: string;
+  /** 'l' para la destacada, 's' para miniaturas */
+  size?: 's' | 'l';
+}
+const { imagen, fecha, class: className = '', size = 's' } = Astro.props;
+const dia = fecha.getDate();
+const mes = new Intl.DateTimeFormat('es-ES', { month: 'short' }).format(fecha).replace('.', '');
+const radius = size === 'l' ? 'rounded-[22px]' : 'rounded-[14px]';
+---
+
+{
+  imagen ? (
+    <img class:list={['aspect-square w-full bg-band object-cover', radius, className]} src={imagen} alt="" loading="lazy" decoding="async" />
+  ) : (
+    <div
+      class:list={['@container relative aspect-square w-full overflow-hidden bg-btn font-display text-white', radius, className]}
+      aria-hidden="true"
+    >
+      <span class="absolute left-[10cqi] top-[10cqi] text-[max(7px,7.5cqi)] font-bold uppercase tracking-[0.16em] text-warm @max-[120px]:hidden">
+        Prédica
+      </span>
+      <span class="absolute bottom-[9cqi] left-[10cqi] flex flex-col leading-[0.85] @max-[120px]:inset-0 @max-[120px]:items-center @max-[120px]:justify-center">
+        <b class="text-[38cqi] font-extrabold tracking-[-0.06em] @max-[120px]:text-[44cqi]">{dia}</b>
+        <span class="mt-[2cqi] text-[12cqi] font-bold uppercase tracking-[0.04em] @max-[120px]:text-[17cqi]">{mes}</span>
+      </span>
+      <svg class="absolute right-[9cqi] top-[9cqi] w-[26cqi] text-warm @max-[120px]:hidden" viewBox="0 0 64 24"><path d="M3 14 C 11 4, 19 4, 27 12 S 43 22, 51 12 S 59 6, 61 8" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" /></svg>
+    </div>
+  )
+}

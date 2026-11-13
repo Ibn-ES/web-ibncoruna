@@ -1,0 +1,120 @@
+---
+/**
+ * Ilustración a dos tonos: el mar de A Coruña y la Torre de Hércules de noche,
+ * con la luz cálida del faro. Hace de "foto de la ciudad a dos tonos" hasta
+ * que haya fotos reales; usa solo colores de la paleta, así que cambia con ella.
+ */
+const stars = [
+  [90, 110, 1.6], [210, 70, 1.2], [330, 150, 1.8], [470, 60, 1.1], [560, 190, 1.4],
+  [700, 90, 1.7], [820, 40, 1.2], [930, 140, 1.3], [1300, 80, 1.6], [1390, 170, 1.2],
+  [150, 250, 1.1], [640, 260, 1.2], [1240, 220, 1.3], [400, 300, 1.0],
+];
+---
+
+<svg
+  class="absolute inset-0 h-full w-full z-[-1] max-[720px]:left-auto max-[720px]:right-[-230px] max-[720px]:w-[calc(100%+230px)] max-[720px]:max-w-none"
+  viewBox="0 0 1440 900"
+  preserveAspectRatio="xMaxYMax slice"
+  aria-hidden="true"
+  focusable="false"
+>
+  <!-- Estrellas -->
+  <g>
+    {stars.map(([x, y, r]) => <circle class="fill-mist opacity-55" cx={x} cy={y} r={r} />)}
+  </g>
+
+  <!-- Halo y haz del faro -->
+  <defs>
+    <radialGradient id="faro-glow">
+      <stop offset="0" style="stop-color: var(--warm); stop-opacity: 0.55"></stop>
+      <stop offset="0.25" style="stop-color: var(--warm); stop-opacity: 0.18"></stop>
+      <stop offset="1" style="stop-color: var(--warm); stop-opacity: 0"></stop>
+    </radialGradient>
+  </defs>
+  <circle class="mix-blend-screen max-[720px]:opacity-55" cx="1110" cy="340" r="340" fill="url(#faro-glow)"></circle>
+  <polygon
+    class="fill-warm opacity-[0.07] [transform-origin:1110px_330px] motion-safe:animate-[breathe_6s_ease-in-out_infinite_alternate]"
+    points="1110,330 -60,150 -60,420"
+  ></polygon>
+
+  <!-- Promontorio -->
+  <path
+    class="fill-[color-mix(in_srgb,var(--band)_45%,var(--deep))]"
+    d="M760 900 L760 640 C 820 610, 880 600, 940 585 C 990 572, 1030 560, 1060 556 L1160 556 C 1200 560, 1250 575, 1300 600 C 1360 630, 1410 640, 1440 650 L1440 900 Z"
+  ></path>
+
+  <!-- Torre de Hércules (silueta simplificada) -->
+  <g class="max-[720px]:opacity-55">
+    <polygon class="fill-[color-mix(in_srgb,var(--band)_30%,var(--deep))]" points="1066,560 1154,560 1147,404 1073,404"></polygon>
+    <rect class="fill-[color-mix(in_srgb,var(--band)_30%,var(--deep))]" x="1083" y="372" width="54" height="34"></rect>
+    <rect class="fill-[color-mix(in_srgb,var(--band)_30%,var(--deep))]" x="1095" y="351" width="30" height="23"></rect>
+    <path class="fill-[color-mix(in_srgb,var(--band)_30%,var(--deep))]" d="M1099 330 Q1110 314 1121 330 Z"></path>
+    <g>
+      <path class="fill-none stroke-[3px] stroke-[color-mix(in_srgb,var(--band)_55%,var(--deep))]" d="M1073 452 L1147 420"></path>
+      <path class="fill-none stroke-[3px] stroke-[color-mix(in_srgb,var(--band)_55%,var(--deep))]" d="M1071 500 L1149 466"></path>
+      <path class="fill-none stroke-[3px] stroke-[color-mix(in_srgb,var(--band)_55%,var(--deep))]" d="M1068 548 L1152 512"></path>
+    </g>
+  </g>
+  <rect
+    class="fill-warm max-[720px]:opacity-55 motion-safe:animate-[flicker_6s_ease-in-out_infinite_alternate]"
+    x="1100"
+    y="330"
+    width="20"
+    height="22"
+    rx="2"
+  ></rect>
+
+  <!-- Mar: capas de olas (de atrás hacia delante) -->
+  <g
+    class="motion-safe:supports-[animation-timeline:scroll()]:animate-[rise_linear_both] motion-safe:supports-[animation-timeline:scroll()]:[animation-timeline:scroll(root)] motion-safe:supports-[animation-timeline:scroll()]:[animation-range:0_90vh]"
+  >
+    <g class="motion-safe:animate-[sway_9s_ease-in-out_infinite_alternate]">
+      <path class="fill-[color-mix(in_srgb,var(--band)_55%,var(--deep))]" d="M-200 660 C -80 640, 40 640, 160 660 S 400 680, 520 660 S 760 640, 880 660 S 1120 680, 1240 660 S 1480 640, 1640 660 V 900 H -200 Z"></path>
+    </g>
+    <g class="motion-safe:animate-[sway_11s_ease-in-out_infinite_alternate-reverse]">
+      <path class="fill-[color-mix(in_srgb,var(--band)_72%,var(--deep))]" d="M-200 712 C -60 690, 80 690, 220 712 S 500 734, 640 712 S 920 690, 1060 712 S 1340 734, 1480 712 S 1600 700, 1640 706 V 900 H -200 Z"></path>
+    </g>
+    <g class="motion-safe:animate-[sway_8s_ease-in-out_infinite_alternate]">
+      <path class="fill-[color-mix(in_srgb,var(--band)_86%,var(--deep))]" d="M-200 770 C -40 746, 120 746, 280 770 S 600 794, 760 770 S 1080 746, 1240 770 S 1560 794, 1640 776 V 900 H -200 Z"></path>
+    </g>
+    <g class="motion-safe:animate-[sway_12s_ease-in-out_infinite_alternate-reverse]">
+      <path class="fill-band" d="M-200 834 C -20 810, 160 810, 340 834 S 700 858, 880 834 S 1240 810, 1420 834 S 1600 850, 1640 842 V 900 H -200 Z"></path>
+    </g>
+  </g>
+</svg>
+
+<style>
+  /* Los nombres de @keyframes no son clases de utilidad: se referencian desde
+     animate-[nombre_...] en el marcado, pero hay que definirlos en CSS. */
+  @keyframes sway {
+    from {
+      transform: translateX(-60px);
+    }
+    to {
+      transform: translateX(60px);
+    }
+  }
+  @keyframes breathe {
+    from {
+      opacity: 0.04;
+      transform: rotate(1.2deg);
+    }
+    to {
+      opacity: 0.1;
+      transform: rotate(-1.2deg);
+    }
+  }
+  @keyframes flicker {
+    from {
+      opacity: 0.85;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes rise {
+    to {
+      transform: translateY(-70px);
+    }
+  }
+</style>

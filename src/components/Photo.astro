@@ -1,0 +1,62 @@
+---
+/**
+ * Hueco para foto.
+ * - Sin `src`: muestra un marcador con la indicación de qué foto va ahí.
+ * - Con `src`: muestra la foto. Con `duotone`, la trata a dos tonos con la paleta
+ *   (para fotos de la ciudad y el mar; las de personas, a color natural).
+ */
+interface Props {
+  label: string;
+  src?: string;
+  alt?: string;
+  duotone?: boolean;
+  tone?: 'mist' | 'soft' | 'deep';
+  class?: string;
+}
+const { label, src, alt = '', duotone = false, tone = 'mist', class: className = '' } = Astro.props;
+
+const toneBg = { mist: 'bg-mist', soft: 'bg-surface', deep: 'bg-[color-mix(in_srgb,var(--deep)_88%,var(--band))]' }[tone];
+const chipClass =
+  tone === 'deep'
+    ? 'relative inline-flex items-center gap-2 rounded-full bg-white px-[14px] py-[9px] font-display text-[0.8125rem] font-semibold text-deep'
+    : 'relative inline-flex items-center gap-2 rounded-full bg-deep px-[14px] py-[9px] font-display text-[0.8125rem] font-semibold text-white';
+---
+
+{
+  src ? (
+    <figure
+      class:list={[
+        'relative m-0 overflow-hidden rounded-m',
+        duotone ? 'bg-band' : 'bg-mist',
+        className,
+      ]}
+    >
+      <img
+        class:list={[
+          'h-full w-full object-cover transition-transform duration-[0.8s] ease-out',
+          { 'grayscale contrast-[110%] mix-blend-multiply after:absolute after:inset-0 after:bg-mist after:opacity-35 after:mix-blend-lighten': duotone },
+        ]}
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+  ) : (
+    <figure
+      class:list={['relative m-0 grid place-items-center overflow-hidden rounded-m text-deep', toneBg, tone === 'deep' && 'text-white', className]}
+      role="img"
+      aria-label={`Espacio para foto: ${label}`}
+    >
+      <svg class="absolute inset-0 h-full w-full" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        {[60, 100, 140, 180, 220, 260].map((y) => (
+          <path class="fill-none stroke-current opacity-[0.14]" stroke-width="1.5" d={`M-20 ${y} C 40 ${y - 14}, 80 ${y - 14}, 140 ${y} S 240 ${y + 14}, 300 ${y} S 380 ${y - 14}, 440 ${y}`} />
+        ))}
+      </svg>
+      <figcaption class={chipClass}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z" /><circle cx="12" cy="13" r="3.5" /></svg>
+        Foto · {label}
+      </figcaption>
+    </figure>
+  )
+}

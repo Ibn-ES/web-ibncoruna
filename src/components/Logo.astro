@@ -1,0 +1,22 @@
+---
+import { Image } from 'astro:assets';
+import logoBlue from '../assets/logo-blue.png';
+import logoWhite from '../assets/logo-white.png';
+
+interface Props {
+  size?: 's' | 'l';
+  /** 'blue' sobre fondos claros, 'white' sobre fondos oscuros (footer, menú móvil) */
+  tone?: 'blue' | 'white';
+  class?: string;
+}
+const { size = 's', tone = 'blue', class: className = '' } = Astro.props;
+const src = tone === 'white' ? logoWhite : logoBlue;
+---
+
+<Image
+  src={src}
+  alt="Buenas Noticias · IBN Coruña"
+  width={450}
+  height={312}
+  class:list={['w-auto', size === 'l' ? 'h-20' : 'h-12', className]}
+/>

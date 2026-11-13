@@ -1,0 +1,116 @@
+---
+import { getTestimonios } from '../lib/testimonios';
+
+const { testimonios, esEjemplo, fuente } = await getTestimonios();
+const inicial = (n: string) => n.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').slice(0, 1) || '·';
+---
+
+<section id="testimonios" class="pb-[clamp(100px,12vw,160px)] pt-[clamp(60px,7vw,96px)]" aria-labelledby="testimonios-title">
+  <div class="container reveal flex flex-wrap items-end justify-between gap-6">
+    <div>
+      <p class="eyebrow">Testimonios</p>
+      <h2 id="testimonios-title" class="display-l mt-4 max-w-[14ch]">Fe de verdad, gente de verdad.</h2>
+    </div>
+    <div class="flex gap-2">
+      <button type="button" class="grid h-[52px] w-[52px] cursor-pointer place-items-center rounded-full border border-line-strong bg-white text-deep transition-colors duration-200 hover:bg-deep hover:text-white" data-rail-prev aria-label="Anteriores">
+        <svg class="h-[22px] w-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+      </button>
+      <button type="button" class="grid h-[52px] w-[52px] cursor-pointer place-items-center rounded-full border border-line-strong bg-white text-deep transition-colors duration-200 hover:bg-deep hover:text-white" data-rail-next aria-label="Siguientes">
+        <svg class="h-[22px] w-[22px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg>
+      </button>
+    </div>
+  </div>
+
+  {esEjemplo && <p class="container mt-6"><span class="inline-block rounded-full border border-dashed border-line-strong px-3 py-[6px] font-display text-xs font-semibold text-muted">Datos de ejemplo · configura DIRECTUS_URL o Cloudinary</span></p>}
+
+  <ul
+    class="[--edge:max(var(--gutter),calc((100vw-var(--max))/2+var(--gutter)))] mt-[clamp(32px,4vw,48px)] flex list-none gap-4 overflow-x-auto px-[var(--edge)] pb-6 pt-1 [scroll-padding-inline:var(--edge)] [scroll-snap-type:x_mandatory] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+    role="list"
+    data-rail
+    data-fuente={fuente}
+  >
+    {
+      testimonios.map((t, i) =>
+        t.tipo === 'video' ? (
+          <li class="group/card relative aspect-[9/16] w-[clamp(240px,24vw,300px)] flex-none overflow-hidden rounded-[var(--radius-l)] bg-deep text-white [scroll-snap-align:start]">
+            {t.videoUrl ? (
+              <button
+                type="button"
+                class="group/media absolute inset-0 m-0 grid h-full w-full cursor-pointer place-items-center border-0 bg-[color-mix(in_srgb,var(--deep)_85%,var(--band))] p-0 object-cover"
+                data-video={t.videoUrl}
+                aria-label={`Ver el testimonio de ${t.nombre}`}
+              >
+                {t.posterUrl && <img class="absolute inset-0 h-full w-full object-cover transition-transform duration-[0.8s] ease-out group-hover/media:scale-[1.04]" src={t.posterUrl} alt="" loading="lazy" decoding="async" />}
+                <span class="relative grid h-[68px] w-[68px] place-items-center rounded-full border border-[color-mix(in_srgb,#fff_40%,transparent)] bg-[color-mix(in_srgb,#fff_22%,transparent)] backdrop-blur-[8px] transition-transform duration-[0.4s] ease-out group-hover/media:scale-[1.08]" aria-hidden="true">
+                  <svg class="h-7 w-7 translate-x-[2px] fill-white" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" /></svg>
+                </span>
+              </button>
+            ) : (
+              <div class="absolute inset-0 grid h-full w-full cursor-default place-items-center bg-[color-mix(in_srgb,var(--deep)_85%,var(--band))]" role="img" aria-label="Espacio para un vídeo de testimonio">
+                <svg class="absolute inset-0 h-full w-full" viewBox="0 0 200 360" preserveAspectRatio="none" aria-hidden="true">
+                  {[60, 110, 160, 210, 260, 310].map((y) => (
+                    <path class="fill-none stroke-mist opacity-[0.18]" stroke-width="1.2" d={`M-10 ${y} C 30 ${y - 12}, 60 ${y - 12}, 100 ${y} S 170 ${y + 12}, 210 ${y}`} />
+                  ))}
+                </svg>
+                <span class="absolute left-4 top-4 rounded-full bg-white px-3 py-[7px] font-display text-xs font-semibold text-deep">Vídeo · testimonio</span>
+                <span class="relative grid h-[68px] w-[68px] place-items-center rounded-full border border-[color-mix(in_srgb,#fff_40%,transparent)] bg-[color-mix(in_srgb,#fff_22%,transparent)] backdrop-blur-[8px]" aria-hidden="true">
+                  <svg class="h-7 w-7 translate-x-[2px] fill-white" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z" /></svg>
+                </span>
+              </div>
+            )}
+            <div class="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-start gap-[2px] bg-[linear-gradient(to_top,color-mix(in_srgb,var(--deep)_85%,transparent),transparent)] px-5 pb-5 pt-16 group-has-[video]/card:hidden">
+              <strong class="block font-display font-bold">{t.nombre}</strong>
+              {t.detalle && <span>{t.detalle}</span>}
+            </div>
+          </li>
+        ) : (
+          <li
+            class:list={[
+              'relative aspect-[9/16] w-[clamp(240px,24vw,300px)] flex-none overflow-hidden rounded-[var(--radius-l)] p-[28px_24px_24px] flex flex-col [scroll-snap-align:start]',
+              i % 4 === 1 ? 'bg-warm' : 'bg-surface-strong',
+            ]}
+          >
+            <svg class="w-10 fill-deep opacity-85" viewBox="0 0 48 36" aria-hidden="true"><path d="M0 36V22C0 9 7 2 19 0l2 6c-7 2-10 6-10 12h9v18H0zm27 0V22C27 9 34 2 46 0l2 6c-7 2-10 6-10 12h9v18H27z" /></svg>
+            <blockquote class="mt-6">
+              <p class="font-display text-[clamp(1.5rem,2.2vw,1.875rem)] font-extrabold leading-[1.1] tracking-[-0.03em] [text-wrap:balance]">{t.texto}</p>
+            </blockquote>
+            <div class="mt-auto flex items-center gap-3 text-[0.9375rem] leading-[1.3]">
+              <span class="grid h-11 w-11 flex-none place-items-center rounded-full bg-white font-display font-extrabold" aria-hidden="true">{inicial(t.nombre)}</span>
+              <span>
+                <strong class="block font-display font-bold">{t.nombre}</strong>
+                {t.detalle && <span>{t.detalle}</span>}
+              </span>
+            </div>
+          </li>
+        ),
+      )
+    }
+  </ul>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-rail]').forEach((rail) => {
+    const section = rail.closest('section')!;
+    const step = () => (rail.querySelector('li')?.getBoundingClientRect().width ?? 300) + 16;
+    section.querySelector('[data-rail-prev]')?.addEventListener('click', () => rail.scrollBy({ left: -step() * 2, behavior: 'smooth' }));
+    section.querySelector('[data-rail-next]')?.addEventListener('click', () => rail.scrollBy({ left: step() * 2, behavior: 'smooth' }));
+  });
+
+  // Al pulsar un vídeo se sustituye la portada por el reproductor (el vídeo no se descarga hasta entonces)
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as Element).closest<HTMLButtonElement>('[data-video]');
+    if (!btn) return;
+    document.querySelectorAll('video[data-testimonio]').forEach((v) => (v as HTMLVideoElement).pause());
+    document.dispatchEvent(new CustomEvent('bn:pausar-audio'));
+    const video = document.createElement('video');
+    video.src = btn.dataset.video!;
+    video.controls = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.dataset.testimonio = '';
+    video.className = btn.className;
+    const poster = btn.querySelector('img');
+    if (poster) video.poster = poster.src;
+    btn.replaceWith(video);
+  });
+</script>
