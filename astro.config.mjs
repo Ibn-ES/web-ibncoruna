@@ -2,9 +2,10 @@
 import { defineConfig } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  // Cambia esto por el dominio definitivo (se usa para las URLs canónicas y Open Graph).
+  // Dominio definitivo: se usa para las URLs canónicas, Open Graph y el sitemap.
   site: 'https://buenasnoticiascoruna.es',
 
   i18n: {
@@ -15,6 +16,15 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
+
+  integrations: [
+    sitemap({
+      i18n: {
+        defaultLocale: 'es',
+        locales: { es: 'es-ES', gl: 'gl-ES' },
+      },
+    }),
+  ],
 
   vite: {
     plugins: [tailwindcss()],

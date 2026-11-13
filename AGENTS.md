@@ -114,7 +114,14 @@ El sitio es bilingüe: **español** es el idioma principal (rutas sin prefijo: `
 - **Fechas** (`formatFecha` en `lib/predicas.ts`, mes en `EpisodeCover.astro`): reciben `Astro.currentLocale` y usan el tag de `Intl` (`es-ES` / `gl-ES`) correspondiente.
 - Las traducciones al gallego de `ui.ts` y de los textos de ejemplo son una primera versión hecha por el agente, no por un hablante nativo: que alguien de la iglesia las revise antes de que el sitio se use de verdad en gallego.
 
-## Contenido y huecos
+## SEO
+
+- **Dominio definitivo:** `buenasnoticiascoruna.es` (`site` en `astro.config.mjs`). De ahí salen las URLs canónicas, el `hreflang`, Open Graph y el sitemap.
+- **Sitemap:** lo genera `@astrojs/sitemap` en el build (`/sitemap-index.xml`), con las alternativas `es`/`gl` de cada página incluidas automáticamente (configurado en `astro.config.mjs`). No hay que tocarlo a mano.
+- **`public/robots.txt`:** permite todo y apunta al sitemap. Si cambia el dominio, actualízalo también ahí (la URL del sitemap va escrita, no se genera sola).
+- **Imagen para compartir (`public/og-image.png`):** estática, 1200×630, generada una vez con un script puntual (logo + lema + ola, sobre `--deep`), no en cada build. Se usa en todas las páginas (`og:image`, `twitter:image` en `Layout.astro`). Si cambia el logo o el lema principal de forma notable, regenérala a mano (no hay pipeline automático: añadir uno con `@vercel/og` o similar sería una dependencia nueva para algo que cambia muy de tarde en tarde).
+- **Datos estructurados (JSON-LD):** solo en la portada (`/` y `/gl/`), tipo `schema.org/Church`, en `Layout.astro`. Lee nombre, dirección y redes de los mismos `lib/*.ts` que ya usa la página (domingo, contacto), así que se mantiene solo al día.
+- **Meta description y `og:description`:** por defecto `t('layout.description')` / `t('legal.metaDescription')` etc. en `ui.ts`; cada página puede pasarle `description` a `Layout` para una propia (ver `predicas.astro`).
 
 - Los datos que la iglesia aún no ha dado van **entre corchetes**: `[HORA]`, `[DIRECCIÓN]`, `[NOMBRE]`…
 - **No inventes** horarios, direcciones, nombres, testimonios, cifras ni títulos de prédicas. Si falta un dato, deja el hueco.
@@ -200,7 +207,7 @@ El sitio es bilingüe: **español** es el idioma principal (rutas sin prefijo: `
   - `aria-label` en botones de solo icono; `aria-hidden="true"` en SVG decorativos.
   - Áreas táctiles ≥ 44 px.
   - Un solo `<h1>` por página.
-- **Dependencias:** hoy son `astro`, `tailwindcss` + `@tailwindcss/vite`, `@sanity/client`, las dos fuentes de fuentes tipográficas y `fast-xml-parser`; en desarrollo, `vitest`, `eslint` + `eslint-plugin-astro` + `typescript-eslint`. Justifica cualquier dependencia nueva; si lo resuelven 30 líneas propias, mejor eso.
+- **Dependencias:** hoy son `astro`, `@astrojs/sitemap`, `tailwindcss` + `@tailwindcss/vite`, `@sanity/client`, las dos fuentes de fuentes tipográficas y `fast-xml-parser`; en desarrollo, `vitest`, `eslint` + `eslint-plugin-astro` + `typescript-eslint`. Justifica cualquier dependencia nueva; si lo resuelven 30 líneas propias, mejor eso.
 - **Rutas internas:** con `/` delante (`/#contacto`, `/predicas`) para que funcionen desde cualquier página. La navegación sale de `site.nav`, que alimenta el menú y el pie.
 
 ## Cómo añadir cosas
@@ -239,4 +246,3 @@ El sitio es bilingüe: **español** es el idioma principal (rutas sin prefijo: `
 - Envío del formulario «Planifica tu visita» (`site.contacto.formAction`). El aviso legal y la política de privacidad ya tienen página propia (`/legal`, `/privacidad`), editable desde Sanity.
 - Contenido real de los documentos de Sanity (el schema y el webhook de rebuild ya están listos): `testimonio`, `portada`, `lema`, `domingo`, `jovenes`, `contacto`, `predicasEnlaces`, `versiculo`, `esencia`, `legal`, `privacidad` (estos dos últimos tienen de momento texto de ejemplo con `[HUECOS]`, pendiente de que la iglesia dé el texto real: razón social, CIF, domicilio).
 - Decisión de la directiva sobre la letra de lectura (paleta ya decidida: Atlántico, `defaultPalette: 'a'`, selector apagado).
-- Dominio definitivo en `astro.config.mjs`. 

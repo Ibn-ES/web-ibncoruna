@@ -5,6 +5,8 @@ import '@fontsource-variable/lora/wght-italic.css';
 import '../styles/global.css';
 import { site } from '../data/site';
 import { getLema } from '../lib/lema';
+import { getDomingo } from '../lib/domingo';
+import { getContacto } from '../lib/contacto';
 import { esLocale, useTranslations } from '../i18n/ui';
 import PrivacidadAviso from '../components/PrivacidadAviso.astro';
 
@@ -16,15 +18,39 @@ interface Props {
 const locale = esLocale(Astro.currentLocale);
 const t = useTranslations(locale);
 const lema = await getLema(locale);
+const domingo = await getDomingo(locale);
+const contacto = await getContacto(locale);
 
 const { title = `${site.name} · ${lema.principal} ${lema.secundario}`, description = t('layout.description') } =
   Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og-image.png', Astro.site);
 
 // Alternativa en el otro idioma de la misma página (es en la raíz, gl con prefijo /gl).
 const pathSinPrefijo = locale === 'gl' ? Astro.url.pathname.replace(/^\/gl/, '') || '/' : Astro.url.pathname;
 const pathEs = pathSinPrefijo;
 const pathGl = `/gl${pathSinPrefijo === '/' ? '' : pathSinPrefijo}`;
+
+// Datos estructurados (schema.org): solo en la portada, para no repetirlos en cada página.
+const esPortada = pathSinPrefijo === '/';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Church',
+  name: site.name,
+  alternateName: site.shortName,
+  url: String(new URL(locale === 'gl' ? '/gl/' : '/', Astro.site)),
+  logo: String(ogImage),
+  image: String(ogImage),
+  description: t('layout.description'),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: domingo.direccionCompleta,
+    addressLocality: 'A Coruña',
+    addressCountry: 'ES',
+  },
+  email: contacto.email,
+  sameAs: [`https://instagram.com/${contacto.instagram}`],
+};
 ---
 
 <!doctype html>
@@ -47,6 +73,15 @@ const pathGl = `/gl${pathSinPrefijo === '/' ? '' : pathSinPrefijo}`;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {esPortada && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
 
     <!--
       Paleta: ?paleta=a|b|c en la URL la fija (y se recuerda en este navegador).

@@ -27,10 +27,10 @@ export async function getContacto(_locale?: string): Promise<Contacto> {
   if (!d) return local;
 
   return {
-    whatsapp: d.whatsapp ?? local.whatsapp,
-    whatsappUrl: d.whatsappUrl ?? local.whatsappUrl,
-    instagram: d.instagram ?? local.instagram,
-    email: d.email ?? local.email,
-    formAction: d.formAction ?? local.formAction,
+    whatsapp: d.whatsapp?.trim() || local.whatsapp,
+    whatsappUrl: d.whatsappUrl?.trim() || local.whatsappUrl,
+    instagram: d.instagram?.trim() || local.instagram,
+    email: d.email?.trim() || local.email,
+    formAction: d.formAction?.trim() || local.formAction,
   };
 }
