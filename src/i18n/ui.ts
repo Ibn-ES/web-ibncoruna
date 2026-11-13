@@ -41,10 +41,16 @@ const es: Diccionario = {
 
   'layout.saltarContenido': 'Saltar al contenido',
   'layout.description':
-    'Iglesia en A Coruña centrada en la fe, alejada de la religión. Hay buenas noticias: solo tienes que venir.',
+    'Iglesia en A Coruña centrada en la fé, alejada de la religión. Hay buenas noticias: solo tienes que venir.',
 
   'footer.aria': 'Pie de página',
   'footer.volverArriba': 'Volver arriba ↑',
+  'footer.avisoLegal': 'Aviso legal',
+  'footer.privacidad': 'Privacidad',
+
+  'privacidad.texto': 'Usamos lo mínimo para que la web funcione: sin cookies de rastreo ni analítica de terceros.',
+  'privacidad.masInfo': 'Más información',
+  'privacidad.entendido': 'Entendido',
 
   'audioPlayer.reproductor': 'Reproductor de prédicas',
   'audioPlayer.pausarReanudar': 'Pausar o reanudar',
@@ -57,7 +63,7 @@ const es: Diccionario = {
   'episodeCover.predica': 'Prédica',
 
   'testimonios.eyebrow': 'Testimonios',
-  'testimonios.titulo': 'Fe de verdad, gente de verdad.',
+  'testimonios.titulo': 'Fé de verdad, gente de verdad.',
   'testimonios.anteriores': 'Anteriores',
   'testimonios.siguientes': 'Siguientes',
   'testimonios.ejemplo': 'Datos de ejemplo · configura Sanity o Cloudinary',
@@ -67,19 +73,19 @@ const es: Diccionario = {
 
   'semana.eyebrow': 'Cada semana',
   'semana.titulo': 'Un sitio para cada uno.',
-  'semana.lead': 'De los más pequeños a los mayores. Ven cuando quieras: te guardamos sitio.',
+  'semana.lead': '',
   'semana.fotoLabel': 'un domingo real, gente sin posar',
   'semana.domingosTitulo': 'Domingos',
   'semana.domingosTexto': 'Un culto para toda la familia. Hablamos de Jesús con palabras de todos los días.',
   'semana.comoEsDomingo': 'Cómo es un domingo',
-  'semana.jovenesTexto': 'Amigos, preguntas y fe. Preguntas sin filtro: aquí no hay preguntas tontas.',
+  'semana.jovenesTexto': 'Amigos, preguntas y fé. Preguntas sin filtro: aquí no hay preguntas tontas.',
   'semana.primeraVisitaTitulo': 'Tu primera visita',
   'semana.primeraVisitaTexto': 'Qué esperar al llegar: cómo es un domingo, dónde aparcar y qué hay para los niños.',
   'semana.primeraVisitaAria': 'Tu primera visita: qué esperar',
 
   'esencia.eyebrow': 'Quiénes somos',
   'esencia.tituloPre': 'Una iglesia centrada en la',
-  'esencia.tituloFe': 'fe',
+  'esencia.tituloFe': 'fé',
   'esencia.tituloPost': ', alejada de la religión.',
   'esencia.lead': 'Para quienes ya forman parte de la iglesia y para quienes todavía no conocen a Dios, por igual. Jóvenes, familias y mayores.',
 
@@ -89,18 +95,18 @@ const es: Diccionario = {
   'primeraVez.titulo': 'Te esperamos',
   'primeraVez.lead': 'Una familia te espera',
   'primeraVez.q1': '¿Cuándo es?',
-  'primeraVez.a1': (hora) => `Los domingos a las ${hora}. Ven cuando quieras, te guardamos sitio.`,
+  'primeraVez.a1': (hora) => `Los domingos a las ${hora}. Ven cuando quieras, te esperamos.`,
   'primeraVez.q2': '¿Dónde estáis?',
   'primeraVez.comoLlegar': 'Cómo llegar ↗',
   'primeraVez.q3': '¿Cuánto dura?',
   'primeraVez.q4': '¿Qué pasa en un domingo?',
   'primeraVez.q5': '¿Y si vengo con niños?',
   'primeraVez.q6': '¿Tengo que saber algo antes?',
-  'primeraVez.a6': 'No. Ven como eres y trae a quien quieras.',
+  'primeraVez.a6': 'No. Ven como eres y te esperamos',
 
   'visita.eyebrow': 'Planifica tu visita',
   'visita.titulo': 'Eres bienvenido.',
-  'visita.lead': 'Trae a quien quieras.',
+  'visita.lead': '',
   'visita.labelDireccion': 'Dirección',
   'visita.labelDomingos': 'Domingos',
   'visita.labelWhatsapp': 'WhatsApp',
@@ -138,7 +144,7 @@ const es: Diccionario = {
   'paletteSwitcher.paleta': 'Paleta',
 
   'hero.esteDomingo': 'Este domingo',
-  'hero.teGuardamosSitio': 'Te guardamos sitio.',
+  'hero.teGuardamosSitio': 'Te esperamos',
   'hero.masInformacion': 'Más información',
   'hero.anuncio': 'Anuncio',
 
@@ -170,10 +176,16 @@ const gl: Diccionario = {
 
   'layout.saltarContenido': 'Ir ao contido',
   'layout.description':
-    'Igrexa en A Coruña centrada na fe, afastada da relixión. Hai boas novas: só tes que vir.',
+    'Igrexa en A Coruña centrada na fé, afastada da relixión. Hai boas novas: só tes que vir.',
 
   'footer.aria': 'Pé de páxina',
   'footer.volverArriba': 'Volver arriba ↑',
+  'footer.avisoLegal': 'Aviso legal',
+  'footer.privacidad': 'Privacidade',
+
+  'privacidad.texto': 'Usamos o mínimo para que a web funcione: sen cookies de rastrexo nin analítica de terceiros.',
+  'privacidad.masInfo': 'Máis información',
+  'privacidad.entendido': 'Entendido',
 
   'audioPlayer.reproductor': 'Reprodutor de predicacións',
   'audioPlayer.pausarReanudar': 'Pausar ou continuar',
@@ -186,7 +198,7 @@ const gl: Diccionario = {
   'episodeCover.predica': 'Predicación',
 
   'testimonios.eyebrow': 'Testemuños',
-  'testimonios.titulo': 'Fe de verdade, xente de verdade.',
+  'testimonios.titulo': 'Fé de verdade, xente de verdade.',
   'testimonios.anteriores': 'Anteriores',
   'testimonios.siguientes': 'Seguintes',
   'testimonios.ejemplo': 'Datos de exemplo · configura Sanity ou Cloudinary',
@@ -196,19 +208,19 @@ const gl: Diccionario = {
 
   'semana.eyebrow': 'Cada semana',
   'semana.titulo': 'Un sitio para cada un.',
-  'semana.lead': 'Dos máis pequenos aos maiores. Ven cando queiras: gardámoste sitio.',
+  'semana.lead': '',
   'semana.fotoLabel': 'un domingo real, xente sen posar',
   'semana.domingosTitulo': 'Domingos',
   'semana.domingosTexto': 'Un culto para toda a familia. Falamos de Xesús con palabras de cada día.',
   'semana.comoEsDomingo': 'Como é un domingo',
-  'semana.jovenesTexto': 'Amigos, preguntas e fe. Preguntas sen filtro: aquí non hai preguntas parvas.',
+  'semana.jovenesTexto': 'Amigos, preguntas e fé. Preguntas sen filtro: aquí non hai preguntas parvas.',
   'semana.primeraVisitaTitulo': 'A túa primeira visita',
   'semana.primeraVisitaTexto': 'Que esperar ao chegar: como é un domingo, onde aparcar e que hai para os nenos.',
   'semana.primeraVisitaAria': 'A túa primeira visita: que esperar',
 
   'esencia.eyebrow': 'Quen somos',
   'esencia.tituloPre': 'Unha igrexa centrada na',
-  'esencia.tituloFe': 'fe',
+  'esencia.tituloFe': 'fé',
   'esencia.tituloPost': ', afastada da relixión.',
   'esencia.lead': 'Para quen xa forma parte da igrexa e para quen aínda non coñece a Deus, por igual. Mozos, familias e maiores.',
 
@@ -267,7 +279,7 @@ const gl: Diccionario = {
   'paletteSwitcher.paleta': 'Paleta',
 
   'hero.esteDomingo': 'Este domingo',
-  'hero.teGuardamosSitio': 'Gardámoste sitio.',
+  'hero.teGuardamosSitio': 'Te esperamos.',
   'hero.masInformacion': 'Máis información',
   'hero.anuncio': 'Anuncio',
 

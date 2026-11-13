@@ -191,7 +191,7 @@ El sitio es bilingüe: **español** es el idioma principal (rutas sin prefijo: `
 - **JavaScript: el mínimo.** Antes de escribir JS, busca la solución nativa:
   - Popover API para el menú, `<details name>` para el acordeón.
   - `animation-timeline` para las animaciones de scroll, envuelto en `@supports` y `prefers-reduced-motion: no-preference`.
-  - Solo llevan script `AudioPlayer`, `Testimonios`, `PaletteSwitcher`, `Nav` (cerrar el menú) y el vídeo del hero.
+  - Solo llevan script `AudioPlayer`, `Testimonios`, `PaletteSwitcher`, `Nav` (cerrar el menú y el idioma), `PrivacidadAviso` y el vídeo del hero.
 - **Movimiento:** toda animación respeta `prefers-reduced-motion`. El vídeo del hero tampoco arranca con «ahorro de datos».
 - **Accesibilidad**
   - Elementos reales: `<button>`, `<a href>`, `<label>`. Nunca `onclick` en un `<div>`.
@@ -234,7 +234,7 @@ El sitio es bilingüe: **español** es el idioma principal (rutas sin prefijo: `
 - Datos entre corchetes en `site.ts`.
 - Trazo real de la ola (`Wave.astro` sigue con el trazo provisional).
 - Fotos y vídeo del hero.
-- Envío del formulario «Planifica tu visita» (`site.contacto.formAction`) y página de política de privacidad.
+- Envío del formulario «Planifica tu visita» (`site.contacto.formAction`). El aviso legal y la política de privacidad ya enlazan a la web principal (`site.legal`).
 - Contenido real de los documentos de Sanity (el schema y el webhook de rebuild ya están listos): `testimonio`, `portada`, `lema`, `domingo`, `jovenes`, `contacto`, `predicasEnlaces`, `versiculo`, `esencia`.
 - Decisión de la directiva sobre la letra de lectura (paleta ya decidida: Atlántico, `defaultPalette: 'a'`, selector apagado).
 - Dominio definitivo en `astro.config.mjs`. 

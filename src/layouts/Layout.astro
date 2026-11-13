@@ -6,6 +6,7 @@ import '../styles/global.css';
 import { site } from '../data/site';
 import { getLema } from '../lib/lema';
 import { esLocale, useTranslations } from '../i18n/ui';
+import PrivacidadAviso from '../components/PrivacidadAviso.astro';
 
 interface Props {
   title?: string;
@@ -66,5 +67,6 @@ const pathGl = `/gl${pathSinPrefijo === '/' ? '' : pathSinPrefijo}`;
   <body>
     <a class="absolute left-4 top-[-60px] z-[200] rounded-xl bg-deep px-[18px] py-3 font-display font-bold text-white no-underline focus:top-4" href="#contenido">{t('layout.saltarContenido')}</a>
     <slot />
+    <PrivacidadAviso />
   </body>
 </html>
