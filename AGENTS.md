@@ -64,13 +64,13 @@ Copia `.env.example` a `.env`. **Nunca subas `.env`.** Los campos de cada tipo d
 
 ### Sanity Studio (`studio/`)
 
-App aparte dentro del mismo repo, con su propio `package.json` (no es un workspace de npm: se instala y se corre por separado).
+App aparte dentro del mismo repo, con su propio `package.json` (no es un workspace de npm: se instala y se corre por separado). Desplegado en **https://ibncoruna.sanity.studio/** — ahí es donde se edita el contenido (testimonios y portada), no hace falta tocar código para eso.
 
 ```bash
 cd studio
 npm install
 npm run dev       # http://localhost:3333
-npm run deploy    # publica el Studio en sanity.studio
+npm run deploy    # publica los cambios de schema en https://ibncoruna.sanity.studio/
 ```
 
 - `schemaTypes/portada.ts` y `schemaTypes/testimonio.ts`: definen los mismos campos que leen `lib/portada.ts` y `lib/testimonios.ts`. Si cambias un campo en un lado, cámbialo en el otro.
