@@ -46,6 +46,7 @@ public/                 Estáticos (favicon)
 .github/workflows/ci.yml   Lint + test en GitHub Actions
 eslint.config.js           Config de ESLint (incluye .astro)
 vitest.config.ts           Config de Vitest
+studio/                     Sanity Studio: app aparte, con su propio package.json (ver más abajo)
 ```
 
 `pages/*.astro` solo **ordenan secciones**. La lógica y el marcado viven en los componentes; los datos, en `data/` y `lib/`.
@@ -59,7 +60,22 @@ vitest.config.ts           Config de Vitest
 | | Cloudinary (vídeos con una etiqueta) | `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_TESTIMONIOS_TAG` | datos de ejemplo |
 | Hero (fondo + promo) | Sanity, documento singleton `portada` | `SANITY_PROJECT_ID` | `site.hero` |
 
-Copia `.env.example` a `.env`. **Nunca subas `.env`.** Los campos de cada tipo de documento de Sanity están documentados en el comentario de cabecera de su fichero en `lib/`. El proyecto de Sanity es `na5c11mv` (dataset `production`, público: no hace falta token para leer).
+Copia `.env.example` a `.env`. **Nunca subas `.env`.** Los campos de cada tipo de documento de Sanity están documentados en el comentario de cabecera de su fichero en `lib/` (y en el propio schema de `studio/`). El proyecto de Sanity es `na5c11mv` (dataset `production`, público: no hace falta token para leer).
+
+### Sanity Studio (`studio/`)
+
+App aparte dentro del mismo repo, con su propio `package.json` (no es un workspace de npm: se instala y se corre por separado).
+
+```bash
+cd studio
+npm install
+npm run dev       # http://localhost:3333
+npm run deploy    # publica el Studio en sanity.studio
+```
+
+- `schemaTypes/portada.ts` y `schemaTypes/testimonio.ts`: definen los mismos campos que leen `lib/portada.ts` y `lib/testimonios.ts`. Si cambias un campo en un lado, cámbialo en el otro.
+- `portada` es un **singleton**: `structure.ts` lo abre siempre con `documentId` fijo (`"portada"`) y `sanity.config.ts` quita la opción de crear uno nuevo desde el menú global. No hace falta (ni se puede, desde la UI) crear un segundo documento `portada`.
+- `testimonio` es una colección normal; el orden de publicación lo decide Sanity (no hace falta campo de estado, a diferencia de lo que habría sido con Directus).
 
 Reglas que hay que respetar:
 
@@ -189,6 +205,8 @@ Reglas que hay que respetar:
 - **Sin líneas `Co-Authored-By`** ni otras atribuciones de IA en commits o PRs.
 - No hagas commit ni push si no te lo piden.
 - Nunca subas `.env`, `dist/`, `.astro/` ni `node_modules/` (ya están en `.gitignore`).
+- no hacer nunca un push sin autorización
+- primero consultas si parece bien el commit
 
 ## Pendiente conocido
 
@@ -196,6 +214,6 @@ Reglas que hay que respetar:
 - Trazo real de la ola (`Wave.astro` sigue con el trazo provisional).
 - Fotos y vídeo del hero.
 - Envío del formulario «Planifica tu visita» (`site.contacto.formAction`) y página de política de privacidad.
-- Documentos `testimonio` y `portada` en Sanity (schema + contenido), y el webhook de rebuild.
+- Contenido real de los documentos `testimonio` y `portada` en Sanity (el schema ya está en `studio/`), y el webhook de rebuild.
 - Decisión de la directiva sobre paleta y letra de lectura. Cuando se decida: `defaultPalette` y `showPaletteSwitcher: false` en `site.ts`.
 - Dominio definitivo en `astro.config.mjs`. 
