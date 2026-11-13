@@ -9,35 +9,39 @@ import PlayButton from '../components/PlayButton.astro';
 import Testimonios from '../components/Testimonios.astro';
 import Wave from '../components/Wave.astro';
 import { getPredicas, formatFecha } from '../lib/predicas';
+import { getPredicasEnlaces } from '../lib/predicasEnlaces';
 import { site } from '../data/site';
+import { useTranslations } from '../i18n/ui';
 
 const { predicas, esEjemplo } = await getPredicas();
+const enlaces = await getPredicasEnlaces();
+const t = useTranslations(Astro.currentLocale);
+const fecha = (d: Date) => formatFecha(d, Astro.currentLocale);
 ---
 
 <Layout
-  title={`Prédicas · ${site.name}`}
-  description="Las prédicas de cada domingo de Buenas Noticias A Coruña. Escúchalas aquí o en Spotify."
+  title={`${t('predicas.eyebrow')} · ${site.name}`}
+  description={t('predicas.metaDescription')}
 >
   <Nav current="/predicas" />
   <main id="contenido" class="overflow-x-clip">
     <header class="panel on-dark mt-[var(--inset)] bg-deep pb-[clamp(64px,8vw,110px)] pt-[160px] text-white">
       <div class="container">
-        <p class="eyebrow">Prédicas</p>
-        <h1 class="display-xl mt-5 max-w-[12ch] text-[clamp(3rem,8vw,7.5rem)]">Escucha cuando quieras.</h1>
+        <p class="eyebrow">{t('predicas.eyebrow')}</p>
+        <h1 class="display-xl mt-5 max-w-[12ch] text-[clamp(3rem,8vw,7.5rem)]">{t('predicas.titulo')}</h1>
         <Wave width={260} strokeWidth={6} draw={false} class="mt-5" />
         <p class="lead mt-7 max-w-[36rem] text-[color-mix(in_srgb,#fff_84%,var(--mist))]">
-          La prédica de cada domingo, con palabras de todos los días. Aquí o en Spotify, para el coche, el paseo o el
-          sofá.
+          {t('predicas.pageLead')}
         </p>
         <div class="mt-9 flex flex-wrap gap-3">
-          <a href={site.predicas.spotifyUrl} class="btn btn--warm">Seguir en Spotify <span class="arrow" aria-hidden="true">↗</span></a>
-          {site.predicas.applePodcastsUrl && <a href={site.predicas.applePodcastsUrl} class="btn btn--ghost">Apple Podcasts ↗</a>}
+          <a href={enlaces.spotifyUrl} class="btn btn--warm">{t('predicas.seguirSpotify')} <span class="arrow" aria-hidden="true">↗</span></a>
+          {enlaces.applePodcastsUrl && <a href={enlaces.applePodcastsUrl} class="btn btn--ghost">{t('predicas.applePodcasts')}</a>}
         </div>
       </div>
     </header>
 
-    <section class="container pb-0 pt-[clamp(64px,8vw,110px)]" aria-label="Todas las prédicas">
-      {esEjemplo && <p class="mb-6 inline-block rounded-full border border-dashed border-line-strong px-3 py-[6px] font-display text-xs font-semibold text-muted">Datos de ejemplo · configura SPOTIFY_RSS_URL</p>}
+    <section class="container pb-0 pt-[clamp(64px,8vw,110px)]" aria-label={t('predicas.todasAria')}>
+      {esEjemplo && <p class="mb-6 inline-block rounded-full border border-dashed border-line-strong px-3 py-[6px] font-display text-xs font-semibold text-muted">{t('predicas.ejemplo')}</p>}
       <ol class="m-0 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] list-none gap-x-6 gap-y-10 p-0" role="list">
         {
           predicas.map((p) => (
@@ -45,7 +49,7 @@ const { predicas, esEjemplo } = await getPredicas();
               <EpisodeCover imagen={p.imagen} fecha={p.fecha} size="l" />
               <div class="flex flex-col gap-2">
                 <p class="font-display text-[0.8125rem] font-semibold text-accent">
-                  {formatFecha(p.fecha)}
+                  {fecha(p.fecha)}
                   {p.duracion && <> · {p.duracion}</>}
                 </p>
                 <h2 class="text-[1.375rem] leading-[1.15] tracking-[-0.02em]">{p.titulo}</h2>
@@ -53,7 +57,7 @@ const { predicas, esEjemplo } = await getPredicas();
               </div>
               <div class="mt-auto flex items-center gap-4">
                 <PlayButton predica={p} />
-                {p.enlace && <a href={p.enlace} class="py-3 font-display text-[0.9375rem] font-bold text-accent no-underline">Spotify ↗</a>}
+                {p.enlace && <a href={p.enlace} class="py-3 font-display text-[0.9375rem] font-bold text-accent no-underline">{t('predicas.spotify')}</a>}
               </div>
             </li>
           ))

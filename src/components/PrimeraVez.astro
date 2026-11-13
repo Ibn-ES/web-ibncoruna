@@ -1,13 +1,18 @@
 ---
-import { site } from '../data/site';
+import { getDomingo } from '../lib/domingo';
+import { useTranslations, localizedHref } from '../i18n/ui';
+
+const domingo = await getDomingo(Astro.currentLocale);
+const t = useTranslations(Astro.currentLocale);
+const href = (h: string) => localizedHref(Astro.currentLocale, h);
 
 const preguntas = [
-  { q: '¿Cuándo es?', a: `Los domingos a las ${site.domingo.hora}. Ven cuando quieras, te guardamos sitio.`, open: true },
-  { q: '¿Dónde estáis?', a: site.domingo.direccionCompleta, link: { href: site.domingo.mapaUrl, label: 'Cómo llegar ↗' } },
-  { q: '¿Cuánto dura?', a: site.domingo.duracion },
-  { q: '¿Qué pasa en un domingo?', a: site.domingo.resumen },
-  { q: '¿Y si vengo con niños?', a: site.domingo.ninos },
-  { q: '¿Tengo que saber algo antes?', a: 'No. Ven como eres y trae a quien quieras.' },
+  { q: t('primeraVez.q1'), a: t('primeraVez.a1', domingo.hora), open: true },
+  { q: t('primeraVez.q2'), a: domingo.direccionCompleta, link: { href: domingo.mapaUrl, label: t('primeraVez.comoLlegar') } },
+  { q: t('primeraVez.q3'), a: domingo.duracion },
+  { q: t('primeraVez.q4'), a: domingo.resumen },
+  { q: t('primeraVez.q5'), a: domingo.ninos },
+  { q: t('primeraVez.q6'), a: t('primeraVez.a6') },
 ];
 ---
 
@@ -15,12 +20,12 @@ const preguntas = [
   <div class="container grid grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-start gap-x-[clamp(40px,7vw,120px)] gap-y-14 max-[900px]:grid-cols-1">
     <div class="min-w-0">
       <div class="sticky top-[120px] flex flex-col items-start gap-5 max-[900px]:static">
-        <p class="eyebrow">¿Primera vez?</p>
-        <h2 id="pv-title" class="display-l">Te esperamos en la puerta.</h2>
+        <p class="eyebrow">{t('primeraVez.eyebrow')}</p>
+        <h2 id="pv-title" class="display-l">{t('primeraVez.titulo')}</h2>
         <p class="lead mb-3 text-[color-mix(in_srgb,#fff_84%,var(--mist))]">
-          Solo tienes que venir. Si nos avisas antes, alguien te recibirá al llegar y te acompañará dentro.
+          {t('primeraVez.lead')}
         </p>
-        <a href="#contacto" class="btn btn--warm">Planifica tu visita <span class="arrow" aria-hidden="true">→</span></a>
+        <a href={href('/#contacto')} class="btn btn--warm">{t('cta.planificaVisita')} <span class="arrow" aria-hidden="true">→</span></a>
       </div>
     </div>
 

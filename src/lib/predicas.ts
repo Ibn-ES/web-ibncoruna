@@ -48,6 +48,19 @@ async function load(): Promise<PredicasResult> {
   return { predicas: parseRss(await res.text()), esEjemplo: false };
 }
 
+/** Forma de un <item> tal como lo deja fast-xml-parser (solo los campos que usamos). */
+interface RssItem {
+  guid?: string | { '#text'?: string };
+  title?: string;
+  pubDate?: string;
+  link?: string;
+  'itunes:duration'?: string | number;
+  'itunes:summary'?: string;
+  description?: string;
+  'itunes:image'?: { '@_href'?: string };
+  enclosure?: { '@_url'?: string };
+}
+
 export function parseRss(xml: string): Predica[] {
   const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@_' });
   const channel = parser.parse(xml)?.rss?.channel;
@@ -57,7 +70,7 @@ export function parseRss(xml: string): Predica[] {
   const items = [channel.item ?? []].flat();
 
   return items
-    .map((it: any): Predica => ({
+    .map((it: RssItem): Predica => ({
       id: String(it.guid?.['#text'] ?? it.guid ?? it.link ?? it.title),
       titulo: String(it.title ?? '').trim(),
       fecha: new Date(it.pubDate),
@@ -95,8 +108,9 @@ function limpiarHtml(html: string): string {
     .trim();
 }
 
-export function formatFecha(fecha: Date): string {
-  return new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }).format(fecha);
+export function formatFecha(fecha: Date, locale?: string): string {
+  const tag = locale === 'gl' ? 'gl-ES' : 'es-ES';
+  return new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).format(fecha);
 }
 
 /** Datos de ejemplo mientras no haya RSS configurado. */

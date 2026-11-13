@@ -5,6 +5,8 @@
  * - Con `src`: muestra la foto. Con `duotone`, la trata a dos tonos con la paleta
  *   (para fotos de la ciudad y el mar; las de personas, a color natural).
  */
+import { useTranslations } from '../i18n/ui';
+
 interface Props {
   label: string;
   src?: string;
@@ -14,6 +16,7 @@ interface Props {
   class?: string;
 }
 const { label, src, alt = '', duotone = false, tone = 'mist', class: className = '' } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
 
 const toneBg = { mist: 'bg-mist', soft: 'bg-surface', deep: 'bg-[color-mix(in_srgb,var(--deep)_88%,var(--band))]' }[tone];
 const chipClass =
@@ -46,7 +49,7 @@ const chipClass =
     <figure
       class:list={['relative m-0 grid place-items-center overflow-hidden rounded-m text-deep', toneBg, tone === 'deep' && 'text-white', className]}
       role="img"
-      aria-label={`Espacio para foto: ${label}`}
+      aria-label={t('photo.espacioPara', label)}
     >
       <svg class="absolute inset-0 h-full w-full" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         {[60, 100, 140, 180, 220, 260].map((y) => (
@@ -55,7 +58,7 @@ const chipClass =
       </svg>
       <figcaption class={chipClass}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z" /><circle cx="12" cy="13" r="3.5" /></svg>
-        Foto · {label}
+        {t('photo.foto', label)}
       </figcaption>
     </figure>
   )

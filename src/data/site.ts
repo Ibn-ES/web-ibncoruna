@@ -31,7 +31,7 @@ export const site = {
   /** Paleta por defecto mientras la directiva decide (a, b o c). */
   defaultPalette: 'a' as Palette,
   /** Muestra el selector flotante de paletas. Ponlo a false al publicar. */
-  showPaletteSwitcher: true,
+  showPaletteSwitcher: false,
 
   /**
    * Hero de la portada. Si Directus tiene la colección "portada", sus valores
@@ -41,7 +41,9 @@ export const site = {
     fondo: {
       /** Foto de fondo (también hace de póster del vídeo). Vacío = ilustración del mar.
        * TODO: esta es una foto de muestra (banco de imágenes) solo para ver el resultado.
-       * Sustitúyela por una foto real de la iglesia antes de publicar. */
+       * Sustitúyela por una foto real de la iglesia antes de publicar. 
+       * imagen: 'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=2000&auto=format&fit=crop',
+       * */
       imagen: '',
       /** Vídeo corto en bucle, sin sonido (MP4, 8-12 s, ≤ 3 MB). Opcional. */
       video: '',
@@ -50,6 +52,10 @@ export const site = {
     },
     /** Tarjeta flotante para anunciar algo. null = tarjeta "Este domingo". */
     promo: null as Promo | null,
+    eyebrow: 'Iglesia en A Coruña · fe, no religión',
+    texto: 'Una iglesia con Cristo en el centro, de tú a tú. Da igual si llevas toda la vida en la fe o si nunca has pisado una iglesia: ven como eres, te guardamos sitio.',
+    botonPrincipalTexto: 'Planifica tu visita',
+    botonSecundarioTexto: '¿Primera vez?',
   },
 
   lema: {
@@ -66,6 +72,8 @@ export const site = {
     ninos: '[QUÉ HAY PARA LOS NIÑOS]',
     resumen: '[Dos o tres frases sobre cómo es un domingo, con palabras de todos los días]',
     mapaUrl: '#', // enlace a Google Maps / OpenStreetMap
+    /** Foto real de un domingo (p. ej. la última de Instagram). Vacío = no se muestra. */
+    fotoDestacadaUrl: '',
   },
 
   jovenes: {
@@ -102,12 +110,14 @@ export const site = {
   ],
 
   // Rutas con "/" delante para que funcionen también desde /predicas.
+  // La etiqueta de cada uno vive en i18n/ui.ts (clave `nav.<key>`), para que
+  // salga traducida sin tocar este fichero.
   nav: [
-    { label: 'Visítanos', href: '/#visitanos' },
-    { label: 'Quiénes somos', href: '/#quienes' },
-    { label: 'Prédicas', href: '/predicas' },
-    { label: 'Testimonios', href: '/#testimonios' },
-    { label: 'Jóvenes', href: '/#jovenes' },
-    { label: 'Contacto', href: '/#contacto' },
+    { key: 'visitanos', href: '/#visitanos' },
+    { key: 'quienesSomos', href: '/#quienes' },
+    { key: 'predicas', href: '/predicas' },
+    { key: 'testimonios', href: '/#testimonios' },
+    { key: 'jovenes', href: '/#jovenes' },
+    { key: 'contacto', href: '/#contacto' },
   ],
 };

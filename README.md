@@ -23,6 +23,8 @@ Requiere Node ≥ 22.23 (lo pide Astro 7).
 | `src/layouts/Layout.astro` | `<head>`, SEO, carga de fuentes y elección de paleta. |
 | `src/pages/index.astro` | La portada: solo ordena las secciones. |
 | `src/pages/predicas.astro` | Página `/predicas` con todas las prédicas. |
+| `src/pages/gl/` | Las mismas páginas, en gallego (`/gl/`, `/gl/predicas`). |
+| `src/i18n/ui.ts` | Textos fijos de la interfaz en español y gallego. |
 | `src/components/` | Una sección por fichero (`Hero`, `Semana`, `Esencia`, `PrimeraVez`, `Visita`…). |
 
 ## Decisiones (y por qué)
@@ -36,6 +38,7 @@ Requiere Node ≥ 22.23 (lo pide Astro 7).
 - **Paletas como variables CSS.** `data-palette="a|b|c"` en `<html>` cambia todos los colores. Los nombres son neutros (`--band`, `--deep`, `--warm`…) para no reescribir CSS cuando la directiva elija.
   - En la B (Bandera), el blanco sobre `#0099CC` no llega al contraste mínimo, por eso los botones usan el azul profundo.
 - **Contenido separado en `site.ts`** con la forma de datos que tendría una respuesta de Sanity: cambiarlo por una query real no obliga a tocar los componentes.
+- **Bilingüe (español/gallego)** vía el i18n nativo de Astro: español en la raíz, gallego bajo `/gl/`. Ver «Idiomas» en `AGENTS.md`.
 
 ## Prédicas y testimonios
 

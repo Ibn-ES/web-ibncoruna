@@ -1,7 +1,18 @@
 ---
 import Logo from './Logo.astro';
+import Icon from './Icon.astro';
 import { site } from '../data/site';
+import { getLema } from '../lib/lema';
+import { getJovenes } from '../lib/jovenes';
+import { getContacto } from '../lib/contacto';
+import { useTranslations, localizedHref } from '../i18n/ui';
+
 const year = new Date().getFullYear();
+const lema = await getLema(Astro.currentLocale);
+const jovenes = await getJovenes(Astro.currentLocale);
+const contacto = await getContacto(Astro.currentLocale);
+const t = useTranslations(Astro.currentLocale);
+const href = (h: string) => localizedHref(Astro.currentLocale, h);
 ---
 
 <footer class="on-dark bg-deep pb-8 pt-[clamp(64px,8vw,100px)] text-white">
@@ -9,23 +20,23 @@ const year = new Date().getFullYear();
     <div class="flex flex-wrap justify-between gap-10">
       <div>
         <Logo size="l" tone="white" />
-        <p class="mt-5 max-w-[22rem] text-[color-mix(in_srgb,#fff_82%,var(--mist))]">{site.lema.principal} {site.lema.secundario}</p>
+        <p class="mt-5 max-w-[22rem] text-[color-mix(in_srgb,#fff_82%,var(--mist))]">{lema.principal} {lema.secundario}</p>
       </div>
-      <nav aria-label="Pie de página" class="flex gap-[clamp(40px,8vw,120px)]">
+      <nav aria-label={t('footer.aria')} class="flex gap-[clamp(40px,8vw,120px)]">
         <ul class="m-0 list-none p-0" role="list">
-          {site.nav.map((i) => <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={i.href}>{i.label}</a></li>)}
+          {site.nav.map((i) => <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={href(i.href)}>{t(`nav.${i.key}`)}</a></li>)}
         </ul>
         <ul class="m-0 list-none p-0" role="list">
-          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${site.contacto.instagram}`}>@{site.contacto.instagram}</a></li>
-          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${site.jovenes.instagram}`}>@{site.jovenes.instagram}</a></li>
-          <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={site.contacto.whatsappUrl}>WhatsApp</a></li>
+          <li><a class="flex items-center gap-2 py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${contacto.instagram}`}><Icon name="instagram" />@{contacto.instagram}</a></li>
+          <li><a class="flex items-center gap-2 py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${jovenes.instagram}`}><Icon name="instagram" />@{jovenes.instagram}</a></li>
+          <li><a class="flex items-center gap-2 py-2 font-display font-semibold no-underline hover:text-warm" href={contacto.whatsappUrl}><Icon name="whatsapp" />WhatsApp</a></li>
         </ul>
       </nav>
     </div>
 
     <div class="mt-16 flex flex-wrap justify-between gap-3 border-t border-[color-mix(in_srgb,#fff_20%,transparent)] pt-[22px] text-[0.9375rem] text-[color-mix(in_srgb,#fff_80%,var(--mist))]">
       <span>© {year} {site.name} · {site.shortName}</span>
-      <a class="no-underline" href="#top">Volver arriba ↑</a>
+      <a class="no-underline" href="#top">{t('footer.volverArriba')}</a>
     </div>
   </div>
 </footer>
