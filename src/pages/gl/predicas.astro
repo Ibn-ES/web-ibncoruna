@@ -8,11 +8,10 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import AudioPlayer from '../../components/AudioPlayer.astro';
 import PaletteSwitcher from '../../components/PaletteSwitcher.astro';
-import EpisodeCover from '../../components/EpisodeCover.astro';
-import PlayButton from '../../components/PlayButton.astro';
+import PredicasLista from '../../components/PredicasLista.astro';
 import Testimonios from '../../components/Testimonios.astro';
 import Wave from '../../components/Wave.astro';
-import { getPredicas, formatFecha } from '../../lib/predicas';
+import { getPredicas } from '../../lib/predicas';
 import { getPredicasEnlaces } from '../../lib/predicasEnlaces';
 import { site } from '../../data/site';
 import { useTranslations } from '../../i18n/ui';
@@ -20,7 +19,6 @@ import { useTranslations } from '../../i18n/ui';
 const { predicas, esEjemplo } = await getPredicas();
 const enlaces = await getPredicasEnlaces();
 const t = useTranslations(Astro.currentLocale);
-const fecha = (d: Date) => formatFecha(d, Astro.currentLocale);
 ---
 
 <Layout
@@ -45,28 +43,7 @@ const fecha = (d: Date) => formatFecha(d, Astro.currentLocale);
     </header>
 
     <section class="container pb-0 pt-[clamp(64px,8vw,110px)]" aria-label={t('predicas.todasAria')}>
-      {esEjemplo && <p class="mb-6 inline-block rounded-full border border-dashed border-line-strong px-3 py-[6px] font-display text-xs font-semibold text-muted">{t('predicas.ejemplo')}</p>}
-      <ol class="m-0 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] list-none gap-x-6 gap-y-10 p-0" role="list">
-        {
-          predicas.map((p) => (
-            <li class="reveal flex flex-col gap-4">
-              <EpisodeCover imagen={p.imagen} fecha={p.fecha} size="l" />
-              <div class="flex flex-col gap-2">
-                <p class="font-display text-[0.8125rem] font-semibold text-accent">
-                  {fecha(p.fecha)}
-                  {p.duracion && <> · {p.duracion}</>}
-                </p>
-                <h2 class="text-[1.375rem] leading-[1.15] tracking-[-0.02em]">{p.titulo}</h2>
-                <p class="line-clamp-3 text-base text-muted">{p.descripcion}</p>
-              </div>
-              <div class="mt-auto flex items-center gap-4">
-                <PlayButton predica={p} />
-                {p.enlace && <a href={p.enlace} class="py-3 font-display text-[0.9375rem] font-bold text-accent no-underline">{t('predicas.spotify')}</a>}
-              </div>
-            </li>
-          ))
-        }
-      </ol>
+      <PredicasLista predicas={predicas} esEjemplo={esEjemplo} />
     </section>
 
     <Testimonios />

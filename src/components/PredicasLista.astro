@@ -1,0 +1,99 @@
+---
+/**
+ * Lista de prédicas de /predicas: buscador (por título o fecha) + carga
+ * progresiva (se ven las primeras 16, el resto aparece al bajar). Sin
+ * JavaScript se ven las primeras 16 igualmente, solo que sin buscador ni
+ * forma de ver el resto — degradación aceptable para una mejora de UX.
+ */
+import EpisodeCover from './EpisodeCover.astro';
+import PlayButton from './PlayButton.astro';
+import { formatFecha, type Predica } from '../lib/predicas';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  predicas: Predica[];
+  esEjemplo: boolean;
+}
+const { predicas, esEjemplo } = Astro.props;
+const t = useTranslations(Astro.currentLocale);
+const fecha = (d: Date) => formatFecha(d, Astro.currentLocale);
+
+const LOTE = 16;
+---
+
+{esEjemplo && <p class="mb-6 inline-block rounded-full border border-dashed border-line-strong px-3 py-[6px] font-display text-xs font-semibold text-muted">{t('predicas.ejemplo')}</p>}
+
+<div class="relative mb-10 max-w-[28rem]">
+  <svg class="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
+  <input
+    type="search"
+    id="buscador-predicas"
+    class="h-14 w-full rounded-2xl border-[1.5px] border-[color-mix(in_srgb,var(--deep)_22%,transparent)] bg-white pl-12 pr-5 font-[inherit] text-[1.0625rem] text-deep transition-[border-color,box-shadow] duration-200 placeholder:text-[color-mix(in_srgb,var(--deep)_58%,transparent)] focus:border-btn focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--btn)_18%,transparent)] focus:outline-none"
+    placeholder={t('predicas.buscarPlaceholder')}
+    aria-label={t('predicas.buscarPlaceholder')}
+  />
+</div>
+
+<ol id="lista-predicas" class="m-0 grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] list-none gap-x-6 gap-y-10 p-0" role="list">
+  {
+    predicas.map((p, i) => (
+      <li
+        class:list={['reveal flex flex-col gap-4', i >= LOTE && 'hidden']}
+        data-predica
+        data-search={`${p.titulo} ${fecha(p.fecha)}`.toLowerCase()}
+      >
+        <EpisodeCover imagen={p.imagen} fecha={p.fecha} size="l" />
+        <div class="flex flex-col gap-2">
+          <p class="font-display text-[0.8125rem] font-semibold text-accent">
+            {fecha(p.fecha)}
+            {p.duracion && <> · {p.duracion}</>}
+          </p>
+          <h2 class="text-[1.375rem] leading-[1.15] tracking-[-0.02em]">{p.titulo}</h2>
+          <p class="line-clamp-3 text-base text-muted">{p.descripcion}</p>
+        </div>
+        <div class="mt-auto flex items-center gap-4">
+          <PlayButton predica={p} />
+          {p.enlace && <a href={p.enlace} class="py-3 font-display text-[0.9375rem] font-bold text-accent no-underline">{t('predicas.spotify')}</a>}
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<p id="predicas-sin-resultados" class="hidden text-base text-muted">{t('predicas.sinResultados')}</p>
+<div id="predicas-centinela" class="h-px"></div>
+
+<script define:vars={{ LOTE }}>
+  const buscador = document.getElementById('buscador-predicas');
+  const lista = document.getElementById('lista-predicas');
+  const sinResultados = document.getElementById('predicas-sin-resultados');
+  const centinela = document.getElementById('predicas-centinela');
+  const items = lista ? Array.from(lista.querySelectorAll('[data-predica]')) : [];
+
+  let coincidencias = items;
+  let mostradas = Math.min(LOTE, items.length);
+
+  function aplicarBusqueda() {
+    const q = (buscador?.value ?? '').trim().toLowerCase();
+    coincidencias = q ? items.filter((li) => li.dataset.search.includes(q)) : items;
+    items.forEach((li) => li.classList.add('hidden'));
+    mostradas = 0;
+    revelarMas();
+    sinResultados?.classList.toggle('hidden', coincidencias.length > 0);
+  }
+
+  function revelarMas() {
+    coincidencias.slice(mostradas, mostradas + LOTE).forEach((li) => li.classList.remove('hidden'));
+    mostradas = Math.min(mostradas + LOTE, coincidencias.length);
+  }
+
+  const observador = new IntersectionObserver(
+    (entradas) => {
+      if (entradas.some((e) => e.isIntersecting) && mostradas < coincidencias.length) revelarMas();
+    },
+    { rootMargin: '400px' },
+  );
+  if (centinela) observador.observe(centinela);
+
+  buscador?.addEventListener('input', aplicarBusqueda);
+</script>
