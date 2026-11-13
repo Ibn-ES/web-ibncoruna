@@ -77,7 +77,8 @@
     if (!src || !id) return;
 
     if (id === current) {
-      audio.paused ? audio.play() : audio.pause();
+      if (audio.paused) audio.play();
+      else audio.pause();
       return;
     }
     current = id;

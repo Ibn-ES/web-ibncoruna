@@ -17,11 +17,14 @@ npm install
 npm run dev        # http://localhost:4321
 npm run build      # genera dist/; tiene que terminar en "Complete!" sin errores
 npm run preview    # sirve dist/
+npm run test       # Vitest
+npm run lint       # ESLint (incluye .astro)
 ```
 
 - Requiere **Node ≥ 22.23** (lo exige Astro 7).
-- No hay tests automatizados. **Verificar un cambio = `npm run build` sin errores + revisarlo en el navegador** a 1440 px y a 390 px.
-- No añadas un framework de tests ni un linter sin que te lo pidan.
+- **Siempre debe haber tests.** Toda función con lógica propia en `lib/` (parseo, formateo, transformaciones de URL…) lleva su `*.test.ts` con Vitest al lado (ver `lib/predicas.test.ts`, `lib/cloudinary.test.ts`). Los componentes `.astro` no se testean unitariamente; se comprueban en el navegador.
+- **Verificar un cambio** = `npm run lint` y `npm run test` sin errores + `npm run build` sin errores + revisarlo en el navegador a 1440 px y a 390 px.
+- CI en GitHub Actions (`.github/workflows/ci.yml`) corre `lint` y `test` en cada push a `main`/`develop` y en cada pull request.
 
 ## Estructura
 
@@ -38,7 +41,11 @@ src/
   components/           Una sección o pieza por fichero, con sus estilos dentro
   styles/global.css     Tokens (paletas, tipografía), base, utilidades (.btn, .panel, .eyebrow, .reveal…)
   env.d.ts              Tipos de las variables de entorno
+  lib/*.test.ts          Tests de Vitest, al lado del fichero que prueban
 public/                 Estáticos (favicon)
+.github/workflows/ci.yml   Lint + test en GitHub Actions
+eslint.config.js           Config de ESLint (incluye .astro)
+vitest.config.ts           Config de Vitest
 ```
 
 `pages/*.astro` solo **ordenan secciones**. La lógica y el marcado viven en los componentes; los datos, en `data/` y `lib/`.
@@ -64,6 +71,7 @@ Reglas que hay que respetar:
    - Función `getX()` en `lib/` que devuelve `{ datos, esEjemplo }`.
    - Caché en módulo si se usa en varias páginas (ver `getPredicas`).
    - Tipos explícitos y variable tipada en `env.d.ts` y `.env.example`.
+   - Tests con Vitest de las partes puras (parseo, formateo, transformación de URLs) en `*.test.ts`.
 5. **Prédicas por RSS, no por la API de Spotify:** el RSS no necesita credenciales y trae el MP3, que reproduce `AudioPlayer.astro`.
 6. **URLs de Cloudinary:** se optimizan siempre con los helpers de `lib/cloudinary.ts` (`q_auto`, `f_auto`, póster desde fotograma). No construyas transformaciones a mano en los componentes.
 
@@ -153,7 +161,7 @@ Reglas que hay que respetar:
   - `aria-label` en botones de solo icono; `aria-hidden="true"` en SVG decorativos.
   - Áreas táctiles ≥ 44 px.
   - Un solo `<h1>` por página.
-- **Dependencias:** hoy son `astro`, `tailwindcss` + `@tailwindcss/vite`, `@sanity/client`, las dos fuentes de fuentes tipográficas y `fast-xml-parser`. Justifica cualquier dependencia nueva; si lo resuelven 30 líneas propias, mejor eso.
+- **Dependencias:** hoy son `astro`, `tailwindcss` + `@tailwindcss/vite`, `@sanity/client`, las dos fuentes de fuentes tipográficas y `fast-xml-parser`; en desarrollo, `vitest`, `eslint` + `eslint-plugin-astro` + `typescript-eslint`. Justifica cualquier dependencia nueva; si lo resuelven 30 líneas propias, mejor eso.
 - **Rutas internas:** con `/` delante (`/#contacto`, `/predicas`) para que funcionen desde cualquier página. La navegación sale de `site.nav`, que alimenta el menú y el pie.
 
 ## Cómo añadir cosas
@@ -168,11 +176,12 @@ Reglas que hay que respetar:
 
 ## Antes de dar por terminado un cambio
 
-1. `npm run build` termina sin errores.
-2. Lo has visto en escritorio (1440 px) y en móvil (390 px), y en las tres paletas si toca colores (`?paleta=a|b|c`).
-3. Si toca datos, has probado con y sin variables de entorno. Sin ellas deben salir los datos de ejemplo.
-4. No has inventado contenido ni roto ninguna regla de identidad.
-5. Si cambia el uso o la configuración, el README está actualizado.
+1. `npm run lint` y `npm run test` sin errores. Si tocaste una función de `lib/`, tiene (o actualizaste) su test.
+2. `npm run build` termina sin errores.
+3. Lo has visto en escritorio (1440 px) y en móvil (390 px), y en las tres paletas si toca colores (`?paleta=a|b|c`).
+4. Si toca datos, has probado con y sin variables de entorno. Sin ellas deben salir los datos de ejemplo.
+5. No has inventado contenido ni roto ninguna regla de identidad.
+6. Si cambia el uso o la configuración, el README está actualizado.
 
 ## Git
 
