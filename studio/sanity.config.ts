@@ -16,11 +16,4 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
-
-  document: {
-    // Evita crear un segundo documento "portada" desde el menú "+" global:
-    // el singleton solo se edita desde el atajo de la barra lateral.
-    newDocumentOptions: (prev, { creationContext }) =>
-      creationContext.type === 'global' ? prev.filter((template) => template.templateId !== 'portada') : prev,
-  },
 });
