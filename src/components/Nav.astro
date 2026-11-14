@@ -79,7 +79,7 @@ const hrefIdioma = (l: (typeof locales)[number]) =>
     </button>
   </nav>
 
-  <div id="menu-movil" popover class="sheet on-dark flex flex-col gap-6 rounded-xl bg-deep p-[22px_22px_28px] text-white">
+  <div id="menu-movil" popover class="sheet pointer-events-auto z-[70] on-dark flex-col gap-6 rounded-xl bg-deep p-[22px_22px_28px] text-white">
     <div class="flex items-center justify-between">
       <Logo tone="white" />
       <button
@@ -139,6 +139,12 @@ const hrefIdioma = (l: (typeof locales)[number]) =>
   /* Apertura/cierre del popover: pseudo-clase :popover-open y @starting-style
      no tienen variante de utilidad en Tailwind, así que se quedan en CSS. */
   .sheet {
+    /* Explícito: la clase flex de Tailwind en el elemento (necesaria para
+       flex-col/gap cuando está abierto) tiene la misma especificidad que
+       esta regla, y si su CSS se cargara después ganaría ella, dejando el
+       menú en display:flex incluso cerrado — tapando el botón "Menú" real
+       y lo que haya debajo. display:none aquí evita depender del orden. */
+    display: none;
     position: fixed;
     inset: var(--inset);
     width: auto;

@@ -3,16 +3,22 @@ import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import { site } from '../data/site';
 import { getLema } from '../lib/lema';
-import { getJovenes } from '../lib/jovenes';
 import { getContacto } from '../lib/contacto';
 import { useTranslations, localizedHref } from '../i18n/ui';
 
 const year = new Date().getFullYear();
 const lema = await getLema(Astro.currentLocale);
-const jovenes = await getJovenes(Astro.currentLocale);
 const contacto = await getContacto(Astro.currentLocale);
 const t = useTranslations(Astro.currentLocale);
 const href = (h: string) => localizedHref(Astro.currentLocale, h);
+
+const nombreRed: Record<string, string> = {
+  instagram: 'Instagram',
+  whatsapp: 'WhatsApp',
+  spotify: 'Spotify',
+  apple: 'Apple Podcasts',
+  youtube: 'YouTube',
+};
 ---
 
 <footer class="on-dark bg-deep pb-8 pt-[clamp(64px,8vw,100px)] text-white">
@@ -21,15 +27,25 @@ const href = (h: string) => localizedHref(Astro.currentLocale, h);
       <div>
         <Logo size="l" tone="white" />
         <p class="mt-5 max-w-[22rem] text-[color-mix(in_srgb,#fff_82%,var(--mist))]">{lema.principal} {lema.secundario}</p>
+        {contacto.redes.length > 0 && (
+          <ul class="m-0 mt-6 flex list-none items-center gap-4 p-0" role="list">
+            {contacto.redes.map((r) => (
+              <li>
+                <a
+                  class="grid h-11 w-11 place-items-center rounded-full border border-[color-mix(in_srgb,#fff_25%,transparent)] text-white no-underline transition-colors duration-200 hover:border-warm hover:text-warm"
+                  href={r.url}
+                  aria-label={r.etiqueta || nombreRed[r.tipo]}
+                >
+                  <Icon name={r.tipo} class="h-5 w-5" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-      <nav aria-label={t('footer.aria')} class="flex flex-wrap gap-x-[clamp(40px,8vw,120px)] gap-y-8">
+      <nav aria-label={t('footer.aria')}>
         <ul class="m-0 list-none p-0" role="list">
           {site.nav.map((i) => <li><a class="block py-2 font-display font-semibold no-underline hover:text-warm" href={href(i.href)}>{t(`nav.${i.key}`)}</a></li>)}
-        </ul>
-        <ul class="m-0 list-none p-0" role="list">
-          <li><a class="flex items-center gap-2 py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${contacto.instagram}`}><Icon name="instagram" />@{contacto.instagram}</a></li>
-          <li><a class="flex items-center gap-2 py-2 font-display font-semibold no-underline hover:text-warm" href={`https://instagram.com/${jovenes.instagram}`}><Icon name="instagram" />@{jovenes.instagram}</a></li>
-          <li><a class="flex items-center gap-2 py-2 font-display font-semibold no-underline hover:text-warm" href={contacto.whatsappUrl}><Icon name="whatsapp" />WhatsApp</a></li>
         </ul>
       </nav>
     </div>

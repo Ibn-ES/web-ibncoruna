@@ -89,6 +89,11 @@ export const site = {
     email: '[EMAIL]',
     /** Endpoint que recibirá el formulario "Planifica tu visita" (Directus, Formspree…). */
     formAction: '#',
+    /** Iconos del pie de página. Editable desde Sanity (contacto.redes). */
+    redes: [
+      { tipo: 'instagram', url: 'https://instagram.com/buenasnoticiascoruna' },
+      { tipo: 'whatsapp', url: '#' },
+    ] as { tipo: 'instagram' | 'whatsapp' | 'spotify' | 'apple' | 'youtube'; url: string; etiqueta?: string }[],
   },
 
   /** Aviso legal: editable desde Sanity (singleton "legal"). Esto es el respaldo. */
